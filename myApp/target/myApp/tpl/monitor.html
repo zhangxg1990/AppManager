@@ -1,0 +1,15 @@
+<!--主页面-->
+<div class="main">
+    <!-- header 页面头部 -->
+    <div ng-include="'tpl/common/header.html'"></div>
+     <!-- 页面body -->
+    <div ng-show="isMain" class="main-body" style="background: #ffffff;">
+        <!-- 主容器 页面内容-->
+        <div  data-ui-view >
+            互联网接入口保密监测平台应用系统 !
+        </div>
+    </div>
+    <!-- 加载进度条loading -->
+    <loading loading-flag="isLoading"></loading>
+</div>
+

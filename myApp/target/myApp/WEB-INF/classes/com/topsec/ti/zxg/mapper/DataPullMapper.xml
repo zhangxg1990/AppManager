@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.topsec.ti.zxg.mapper.DataPullMapper">
+    <select id="queryIplocates" resultType="Iplocate">
+  select t.sip,t.dip,count(dip) desTotal from (select sip,dip from trojan_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+  UNION all select sip,dip from exploit_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+  UNION all select sip,dip  from malware_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+  UNION all select sip,dip  from other_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+  UNION all select sip,dip  from abnormal_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)) t group by sip,dip
+    </select>
+  <select id="queryIplocatesAll" resultType="Iplocate">
+    select t.sip,t.dip,count(dip) desTotal from (select sip,dip from trojan_attack_alert_log
+    UNION all select sip,dip from exploit_attack_alert_log
+    UNION all select sip,dip  from malware_attack_alert_log
+    UNION all select sip,dip  from other_attack_alert_log
+    UNION all select sip,dip  from abnormal_attack_alert_log) t group by sip,dip
+  </select>
+  <update id="truncateIp">
+    truncate table mcjc_ip_locate
+  </update>
+  <update id="executeUpdate">
+    CREATE TABLE if not exists gjts_fx (cap_date varchar(255) null,total int null,type varchar(244) null);
+    CREATE TABLE if not exists gjts_fx2 (cap_date varchar(255) null,attr varchar(255) null,total int null,stype varchar(244) null,type varchar(244) null);
+    CREATE TABLE if not exists wlxw_fx (cap_date varchar(255) null,total int null,type varchar(255) null);
+    CREATE TABLE if not exists wlxw_fx2 (cap_date varchar(255) null,attr varchar(255) null,total int null,stype varchar(255) null,type varchar(255) null);
+    CREATE TABLE if not exists xmts_fx (cap_date varchar(255) null,total int null,type varchar(244) null);
+    CREATE TABLE if not exists xmts_fx2 (cap_date varchar(255) null,attr varchar(255) null,total int null,stype varchar(244) null,type varchar(244) null);
+    truncate table gjts_fx;
+    truncate table gjts_fx2;
+    truncate table wlxw_fx;
+    truncate table wlxw_fx2;
+    truncate table xmts_fx;
+    truncate table xmts_fx2;
+    insert into gjts_fx select t.cap_date,sum(t.total) total,"week_total" as type from (select cap_date, count(1) total,"week_total" as type from trojan_attack_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;=date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from exploit_attack_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;=date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from malware_attack_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;=date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from other_attack_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;=date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from abnormal_attack_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;=date_sub(curdate(),interval 1 day) group by cap_date
+    ) t group by t.cap_date;
+    insert into gjts_fx select case t.risk when 1 THEN '无风险级' WHEN 2 THEN '一般级' WHEN 3 THEN '关注级' WHEN 4 THEN '紧急级' end risk,sum(t.total) total,"risk" type
+    from (select date_sub(curdate(),interval 1 day) cap_date, risk, count(1) total,"risk_level" as type from trojan_attack_alert_log group by risk
+    UNION all select date_sub(curdate(),interval 1 day) cap_date, risk, count(1) total,"risk_level" as type from exploit_attack_alert_log group by risk
+    UNION all select date_sub(curdate(),interval 1 day) cap_date, risk, count(1) total,"risk_level" as type from malware_attack_alert_log group by risk
+    UNION all select date_sub(curdate(),interval 1 day) cap_date, risk, count(1) total,"risk_level" as type from other_attack_alert_log group by risk
+    UNION all select date_sub(curdate(),interval 1 day) cap_date, risk, count(1) total,"risk_level" as type from abnormal_attack_alert_log group by risk) t group by t.risk;
+    INSERT into gjts_fx select date_sub(curdate(),interval 1 day) cap_date,count(DISTINCT(dip)) total,"b_attack_dip_num" type from (select cap_date,dip from trojan_attack_alert_log
+    UNION all select cap_date,dip from exploit_attack_alert_log
+    UNION all select cap_date,dip from malware_attack_alert_log
+    UNION all select cap_date,dip from other_attack_alert_log
+    UNION all select cap_date,dip from abnormal_attack_alert_log) t;
+    INSERT into gjts_fx select date_sub(curdate(),interval 1 day) cap_date,count(DISTINCT(sip)) total,"attack_sip_num" type from (select cap_date,sip from trojan_attack_alert_log
+    UNION all select cap_date,sip from exploit_attack_alert_log
+    UNION all select cap_date,sip from malware_attack_alert_log
+    UNION all select cap_date,sip from other_attack_alert_log
+    UNION all select cap_date,sip from abnormal_attack_alert_log) t;
+    INSERT into gjts_fx select t.sip,count(1) total,"attack_sip" type from (select cap_date,sip from trojan_attack_alert_log
+    UNION all select cap_date,sip from exploit_attack_alert_log
+    UNION all select cap_date,sip from malware_attack_alert_log
+    UNION all select cap_date,sip from other_attack_alert_log
+    UNION all select cap_date,sip from abnormal_attack_alert_log) t group by t.sip order by total desc limit 5;
+    INSERT into gjts_fx select t.dip,count(1) total,"b_attack_dip" type from (select cap_date,dip from trojan_attack_alert_log
+    UNION all select cap_date,dip from exploit_attack_alert_log
+    UNION all select cap_date,dip from malware_attack_alert_log
+    UNION all select cap_date,dip from other_attack_alert_log
+    UNION all select cap_date,dip from abnormal_attack_alert_log) t group by t.dip order by total desc limit 5;
+    INSERT into gjts_fx2 select t.*,"attack" type from (SELECT date_sub(curdate(),interval 1 day) cap_date,'1' attr,count(*) total,"木马攻击" stype from trojan_attack_alert_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"漏洞利用" stype from exploit_attack_alert_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"恶意程序" stype from malware_attack_alert_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"其他攻击" stype from other_attack_alert_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"未知攻击" stype from abnormal_attack_alert_log ) t;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"木马攻击" stype,"dport" type from trojan_attack_alert_log group by dport limit 10;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"漏洞利用" stype,"dport" type from exploit_attack_alert_log group by dport limit 10;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"恶意程序" stype,"dport" type from malware_attack_alert_log group by dport limit 10;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"其他攻击" stype,"dport" type  from other_attack_alert_log group by dport limit 10;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"未知攻击" stype,"dport" type from abnormal_attack_alert_log group by dport limit 10;
+    INSERT into gjts_fx2 select cap_date,hour(time),count(1) total,"木马攻击" stype,"hour" type from trojan_attack_alert_log where cap_date=date_sub(curdate(),interval 1 day) group by hour(time);
+    INSERT into gjts_fx2 select cap_date,hour(time),count(1) total,"漏洞利用" stype,"hour" type from exploit_attack_alert_log where cap_date=date_sub(curdate(),interval 1 day) group by hour(time);
+    INSERT into gjts_fx2 select cap_date,hour(time),count(1) total,"恶意程序" stype,"hour" type from malware_attack_alert_log where cap_date=date_sub(curdate(),interval 1 day) group by hour(time);
+    INSERT into gjts_fx2 select cap_date,hour(time),count(1) total,"其他攻击" stype,"hour" type from other_attack_alert_log where cap_date=date_sub(curdate(),interval 1 day) group by hour(time);
+    INSERT into gjts_fx2 select cap_date,hour(time),count(1) total,"未知攻击" stype,"hour" type from abnormal_attack_alert_log where cap_date=date_sub(curdate(),interval 1 day) group by hour(time);
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dip,count(1) total,"木马攻击" stype,"b_attack_dip" type from trojan_attack_alert_log group by dip order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dip,count(1) total,"漏洞利用" stype,"b_attack_dip" type from exploit_attack_alert_log  group by dip order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dip,count(1) total,"恶意程序" stype,"b_attack_dip" type from malware_attack_alert_log  group by dip order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dip,count(1) total,"其他攻击" stype,"b_attack_dip" type from other_attack_alert_log  group by dip order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dip,count(1) total,"未知攻击" stype,"b_attack_dip" type from abnormal_attack_alert_log  group by dip order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,sip,count(1) total,"木马攻击" stype,"attack_sip" type from trojan_attack_alert_log  group by sip order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,sip,count(1) total,"漏洞利用" stype,"attack_sip" type from exploit_attack_alert_log  group by sip order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,sip,count(1) total,"恶意程序" stype,"attack_sip" type from malware_attack_alert_log  group by sip order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,sip,count(1) total,"其他攻击" stype,"attack_sip" type from other_attack_alert_log  group by sip order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,sip,count(1) total,"未知攻击" stype,"attack_sip" type from abnormal_attack_alert_log  group by sip order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"木马攻击" stype,"b_attack_dport" type from trojan_attack_alert_log  group by dport order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"漏洞利用" stype,"b_attack_dport" type from exploit_attack_alert_log  group by dport order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"恶意程序" stype,"b_attack_dport" type from malware_attack_alert_log  group by dport order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"其他攻击" stype,"b_attack_dport" type from other_attack_alert_log  group by dport order by total desc limit 5;
+    INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"未知攻击" stype,"b_attack_dport" type from abnormal_attack_alert_log  group by dport order by total desc limit 5;
+    insert into xmts_fx select t.cap_date,sum(t.total) total,"week_total" as type from (select cap_date, count(1) total,"week_total" as type from email_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from im_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from file_transfer_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from http_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from netdisk_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from other_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date) t group by t.cap_date;
+    insert into xmts_fx select case t.risk when 1 THEN '无风险级' WHEN 2 THEN '一般级' WHEN 3 THEN '关注级' WHEN 4 THEN '紧急级' end risk,sum(t.total) total,"risk" as type
+    from (select  risk, count(1) total,"risk" as type from email_sm_alert_log  group by risk
+    UNION all select  risk, count(1) total,"risk" as type from im_sm_alert_log  group by risk
+    UNION all select  risk, count(1) total,"risk" as type from file_transfer_sm_alert_log  group by risk
+    UNION all select  risk, count(1) total,"risk" as type from http_sm_alert_log  group by risk
+    UNION all select  risk, count(1) total,"risk" as type from netdisk_sm_alert_log  group by risk
+    UNION all select  risk, count(1) total,"risk" as type from other_sm_alert_log  group by risk) t group by t.risk;
+    insert into xmts_fx select date_sub(curdate(),interval 1 day) cap_date,count(DISTINCT(sip)) total,"xm_sip_num" type from (select cap_date,sip,"host" type from email_sm_alert_log
+    UNION all select cap_date,sip,"host" type from im_sm_alert_log
+    UNION all select cap_date,sip,"host" type from file_transfer_sm_alert_log
+    UNION all select cap_date,sip,"host" type from http_sm_alert_log
+    UNION all select cap_date,sip,"host" type from netdisk_sm_alert_log
+    UNION all select cap_date,sip,"host" type from other_sm_alert_log ) t;
+    insert into xmts_fx select date_sub(curdate(),interval 1 day) cap_date,count(DISTINCT(dip)) total,"xm_dip_num" type from (select cap_date,dip,"host" type from email_sm_alert_log
+    UNION all select cap_date,dip,"host" type from im_sm_alert_log
+    UNION all select cap_date,dip,"host" type from file_transfer_sm_alert_log
+    UNION all select cap_date,dip,"host" type from http_sm_alert_log
+    UNION all select cap_date,dip,"host" type from netdisk_sm_alert_log
+    UNION all select cap_date,dip,"host" type from other_sm_alert_log ) t;
+    INSERT into xmts_fx2 select t.*,"xm" type from (SELECT date_sub(curdate(),interval 1 day) cap_date,'1' attr,count(*) total,"电子邮件" stype from email_sm_alert_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"即时通信" stype from im_sm_alert_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"文件传输" stype from file_transfer_sm_alert_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"http发布" stype from http_sm_alert_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"网盘" stype from netdisk_sm_alert_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"其他" stype from other_sm_alert_log ) t;
+    insert into xmts_fx select dip,count(*) total,"xm_dip" type from (select cap_date,dip,"host" type from email_sm_alert_log
+    UNION all select cap_date,dip,"host" type from im_sm_alert_log
+    UNION all select cap_date,dip,"host" type from file_transfer_sm_alert_log
+    UNION all select cap_date,dip,"host" type from http_sm_alert_log
+    UNION all select cap_date,dip,"host" type from netdisk_sm_alert_log
+    UNION all select cap_date,dip,"host" type from other_sm_alert_log ) t group by t.dip order by total desc limit 5;
+    insert into xmts_fx select sip,count(*) total,"xm_sip" type from (select cap_date,sip,"host" type from email_sm_alert_log
+    UNION all select cap_date,sip,"host" type from im_sm_alert_log
+    UNION all select cap_date,sip,"host" type from file_transfer_sm_alert_log
+    UNION all select cap_date,sip,"host" type from http_sm_alert_log
+    UNION all select cap_date,sip,"host" type from netdisk_sm_alert_log
+    UNION all select cap_date,sip,"host" type from other_sm_alert_log ) t group by t.sip order by total desc limit 5;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"电子邮件" stype,"xm_dip_dport" type from email_sm_alert_log  group by dport limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"即时通信" stype,"xm_dip_dport" type from im_sm_alert_log  group by dport limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"文件传输" stype,"xm_dip_dport" type from file_transfer_sm_alert_log  group by dport limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"http发布" stype,"xm_dip_dport" type  from http_sm_alert_log  group by dport limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"网盘" stype,"xm_dip_dport" type from netdisk_sm_alert_log  group by dport limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dport,count(1) total,"其他" stype,"xm_dip_dport" type from other_sm_alert_log  group by dport limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dip,count(1) total,"电子邮件" stype,"xm_dip" type from email_sm_alert_log  group by dip limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dip,count(1) total,"即时通信" stype,"xm_dip" type from im_sm_alert_log  group by dip limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dip,count(1) total,"文件传输" stype,"xm_dip" type from file_transfer_sm_alert_log  group by dip limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dip,count(1) total,"http发布" stype,"xm_dip" type  from http_sm_alert_log  group by dip limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dip,count(1) total,"网盘" stype,"xm_dip" type from netdisk_sm_alert_log  group by dip limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,dip,count(1) total,"其他" stype,"xm_dip" type from other_sm_alert_log  group by dip limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,sip,count(1) total,"电子邮件" stype,"xm_sip" type from email_sm_alert_log  group by sip limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,sip,count(1) total,"即时通信" stype,"xm_sip" type from im_sm_alert_log  group by sip limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,sip,count(1) total,"文件传输" stype,"xm_sip" type from file_transfer_sm_alert_log  group by sip limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,sip,count(1) total,"http发布" stype,"xm_sip" type  from http_sm_alert_log  group by sip limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,sip,count(1) total,"网盘" stype,"xm_sip" type from netdisk_sm_alert_log  group by sip limit 10;
+    INSERT into xmts_fx2 select date_sub(curdate(),interval 1 day) cap_date,sip,count(1) total,"其他" stype,"xm_sip" type from other_sm_alert_log  group by sip limit 10;
+    insert into wlxw_fx select t.cap_date,sum(t.total) total,"week_total" as type from (select cap_date, count(1) total,"week_total" as type from web_behavior_audit_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from ssl_behavior_audit_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from mail_behavior_audit_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from file_behavior_audit_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+    UNION all select cap_date, count(1) total,"week_total" as type from dns_behavior_audit_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date) t group by t.cap_date;
+    insert into wlxw_fx2 select t.*,"wlxw" type from (SELECT date_sub(curdate(),interval 1 day) cap_date,'1' attr,count(*) total,"WEB" stype from web_behavior_audit_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"SSL" stype from ssl_behavior_audit_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"电子邮件" stype from mail_behavior_audit_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"文件传输" stype from file_behavior_audit_log
+    UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"DNS" stype from dns_behavior_audit_log ) t;
+    insert into wlxw_fx select t.protocol,count(1) total,"protocol" type from (SELECT protocol from web_behavior_audit_log
+    UNION ALL SELECT protocol from ssl_behavior_audit_log
+    UNION ALL SELECT protocol from mail_behavior_audit_log
+    UNION ALL SELECT protocol from file_behavior_audit_log
+    UNION ALL SELECT protocol from dns_behavior_audit_log ) t group by t.protocol;
+    insert into wlxw_fx select t.dip,count(1) total,"dip" type from (SELECT dip from web_behavior_audit_log
+    UNION ALL SELECT dip from ssl_behavior_audit_log
+    UNION ALL SELECT dip from mail_behavior_audit_log
+    UNION ALL SELECT dip from file_behavior_audit_log
+    UNION ALL SELECT dip from dns_behavior_audit_log ) t group by t.dip order by total desc limit 5;
+    insert into wlxw_fx select t.domain,count(1) total,"domain" type from (
+    SELECT domain from web_behavior_audit_log
+    UNION ALL SELECT request from dns_behavior_audit_log ) t group by t.domain order by total desc limit 5;
+  </update>
+  <update id="executeDayUpdate">
+CREATE TABLE if not exists gjts_fx (cap_date varchar(255) null,total int null,type varchar(244) null);
+    CREATE TABLE if not exists gjts_fx2 (cap_date varchar(255) null,attr varchar(255) null,total int null,stype varchar(244) null,type varchar(244) null);
+    CREATE TABLE if not exists wlxw_fx (cap_date varchar(255) null,total int null,type varchar(255) null);
+    CREATE TABLE if not exists wlxw_fx2 (cap_date varchar(255) null,attr varchar(255) null,total int null,stype varchar(255) null,type varchar(255) null);
+    CREATE TABLE if not exists xmts_fx (cap_date varchar(255) null,total int null,type varchar(244) null);
+    CREATE TABLE if not exists xmts_fx2 (cap_date varchar(255) null,attr varchar(255) null,total int null,stype varchar(244) null,type varchar(244) null);
+      truncate table gjts_fx;
+      truncate table gjts_fx2;
+      truncate table wlxw_fx;
+      truncate table wlxw_fx2;
+      truncate table xmts_fx;
+      truncate table xmts_fx2;
+      insert into gjts_fx select t.cap_date,sum(t.total) total,"week_total" as type from (select cap_date, count(1) total,"week_total" as type from trojan_attack_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;=date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from exploit_attack_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;=date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from malware_attack_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;=date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from other_attack_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;=date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from abnormal_attack_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;=date_sub(curdate(),interval 1 day) group by cap_date
+      ) t group by t.cap_date;
+      insert into gjts_fx select case t.risk when 1 THEN '无风险级' WHEN 2 THEN '一般级' WHEN 3 THEN '关注级' WHEN 4 THEN '紧急级' end risk,sum(t.total) total,"risk" type
+      from (select cap_date, risk, count(1) total,"risk_level" as type from trojan_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by risk
+      UNION all select cap_date, risk, count(1) total,"risk_level" as type from exploit_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by risk
+      UNION all select cap_date, risk, count(1) total,"risk_level" as type from malware_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by risk
+      UNION all select cap_date, risk, count(1) total,"risk_level" as type from other_attack_alert_log where  cap_date = date_sub(curdate(),interval 1 day) group by risk
+      UNION all select cap_date, risk, count(1) total,"risk_level" as type from abnormal_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by risk) t group by t.risk;
+      INSERT into gjts_fx select date_sub(curdate(),interval 1 day) cap_date,count(DISTINCT(dip)) total,"b_attack_dip_num" type from (select cap_date,dip from trojan_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip from exploit_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip from malware_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip from other_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip from abnormal_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)) t;
+      INSERT into gjts_fx select date_sub(curdate(),interval 1 day) cap_date,count(DISTINCT(sip)) total,"attack_sip_num" type from (select cap_date,sip from trojan_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip from exploit_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip from malware_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip from other_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip from abnormal_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)) t;
+      INSERT into gjts_fx select t.sip,count(1) total,"attack_sip" type from (select cap_date,sip from trojan_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip from exploit_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip from malware_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip from other_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip from abnormal_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)) t group by t.sip order by total desc limit 5;
+      INSERT into gjts_fx select t.dip,count(1) total,"b_attack_dip" type from (select cap_date,dip from trojan_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip from exploit_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip from malware_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip from other_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip from abnormal_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)) t group by t.dip order by total desc limit 5;
+      INSERT into gjts_fx2 select t.*,"attack" type from (SELECT date_sub(curdate(),interval 1 day) cap_date,'1' attr,count(*) total,"木马攻击" stype from trojan_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"漏洞利用" stype from exploit_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"恶意程序" stype from malware_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"其他攻击" stype from other_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"未知攻击" stype from abnormal_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day)) t;
+      INSERT into gjts_fx2 select cap_date,dport,count(1) total,"木马攻击" stype,"dport" type from trojan_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dport limit 10;
+      INSERT into gjts_fx2 select cap_date,dport,count(1) total,"漏洞利用" stype,"dport" type from exploit_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dport limit 10;
+      INSERT into gjts_fx2 select cap_date,dport,count(1) total,"恶意程序" stype,"dport" type from malware_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dport limit 10;
+      INSERT into gjts_fx2 select cap_date,dport,count(1) total,"其他攻击" stype,"dport" type  from other_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dport limit 10;
+      INSERT into gjts_fx2 select cap_date,dport,count(1) total,"未知攻击" stype,"dport" type from abnormal_attack_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dport limit 10;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),hour(time),count(1) total,"木马攻击" stype,"hour" type from trojan_attack_alert_log where date_sub(curdate(),interval 1 day) group by hour(time);
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),hour(time),count(1) total,"漏洞利用" stype,"hour" type from exploit_attack_alert_log where date_sub(curdate(),interval 1 day) group by hour(time);
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),hour(time),count(1) total,"恶意程序" stype,"hour" type from malware_attack_alert_log where date_sub(curdate(),interval 1 day) group by hour(time);
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),hour(time),count(1) total,"其他攻击" stype,"hour" type from other_attack_alert_log where date_sub(curdate(),interval 1 day) group by hour(time);
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),hour(time),count(1) total,"未知攻击" stype,"hour" type from abnormal_attack_alert_log where date_sub(curdate(),interval 1 day) group by hour(time);
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),dip,count(1) total,"木马攻击" stype,"b_attack_dip" type from trojan_attack_alert_log where date_sub(curdate(),interval 1 day) group by dip order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),dip,count(1) total,"漏洞利用" stype,"b_attack_dip" type from exploit_attack_alert_log where date_sub(curdate(),interval 1 day) group by dip order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),dip,count(1) total,"恶意程序" stype,"b_attack_dip" type from malware_attack_alert_log where date_sub(curdate(),interval 1 day) group by dip order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),dip,count(1) total,"其他攻击" stype,"b_attack_dip" type from other_attack_alert_log where date_sub(curdate(),interval 1 day) group by dip order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),dip,count(1) total,"未知攻击" stype,"b_attack_dip" type from abnormal_attack_alert_log where date_sub(curdate(),interval 1 day) group by dip order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),sip,count(1) total,"木马攻击" stype,"attack_sip" type from trojan_attack_alert_log where date_sub(curdate(),interval 1 day) group by sip order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),sip,count(1) total,"漏洞利用" stype,"attack_sip" type from exploit_attack_alert_log where date_sub(curdate(),interval 1 day) group by sip order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),sip,count(1) total,"恶意程序" stype,"attack_sip" type from malware_attack_alert_log where date_sub(curdate(),interval 1 day) group by sip order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),sip,count(1) total,"其他攻击" stype,"attack_sip" type from other_attack_alert_log where date_sub(curdate(),interval 1 day) group by sip order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),sip,count(1) total,"未知攻击" stype,"attack_sip" type from abnormal_attack_alert_log where date_sub(curdate(),interval 1 day) group by sip order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),dport,count(1) total,"木马攻击" stype,"b_attack_dport" type from trojan_attack_alert_log where date_sub(curdate(),interval 1 day) group by dport order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),dport,count(1) total,"漏洞利用" stype,"b_attack_dport" type from exploit_attack_alert_log where date_sub(curdate(),interval 1 day) group by dport order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),dport,count(1) total,"恶意程序" stype,"b_attack_dport" type from malware_attack_alert_log where date_sub(curdate(),interval 1 day) group by dport order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),dport,count(1) total,"其他攻击" stype,"b_attack_dport" type from other_attack_alert_log where date_sub(curdate(),interval 1 day) group by dport order by total desc limit 5;
+      INSERT into gjts_fx2 select date_sub(curdate(),interval 1 day),dport,count(1) total,"未知攻击" stype,"b_attack_dport" type from abnormal_attack_alert_log where date_sub(curdate(),interval 1 day) group by dport order by total desc limit 5;
+      insert into xmts_fx select t.cap_date,sum(t.total) total,"week_total" as type from (select cap_date, count(1) total,"week_total" as type from email_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from im_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from file_transfer_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from http_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from netdisk_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from other_sm_alert_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date) t group by t.cap_date;
+      insert into xmts_fx select case t.risk when 1 THEN '无风险级' WHEN 2 THEN '一般级' WHEN 3 THEN '关注级' WHEN 4 THEN '紧急级' end risk,sum(t.total) total,"risk" as type
+      from (select cap_date, risk, count(1) total,"risk" as type from email_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by risk
+      UNION all select cap_date, risk, count(1) total,"risk" as type from im_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by risk
+      UNION all select cap_date, risk, count(1) total,"risk" as type from file_transfer_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by risk
+      UNION all select cap_date, risk, count(1) total,"risk" as type from http_sm_alert_log where  cap_date = date_sub(curdate(),interval 1 day) group by risk
+      UNION all select cap_date, risk, count(1) total,"risk" as type from netdisk_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by risk
+      UNION all select cap_date, risk, count(1) total,"risk" as type from other_sm_alert_log where cap_date =date_sub(curdate(),interval 1 day) group by risk) t group by t.risk;
+      insert into xmts_fx select date_sub(curdate(),interval 1 day),count(DISTINCT(sip)) total,"xm_sip_num" type from (select cap_date,sip,"host" type from email_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip,"host" type from im_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip,"host" type from file_transfer_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip,"host" type from http_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip,"host" type from netdisk_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip,"host" type from other_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)) t;
+      insert into xmts_fx select date_sub(curdate(),interval 1 day),count(DISTINCT(dip)) total,"xm_dip_num" type from (select cap_date,dip,"host" type from email_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip,"host" type from im_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip,"host" type from file_transfer_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip,"host" type from http_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip,"host" type from netdisk_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip,"host" type from other_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)) t;
+      INSERT into xmts_fx2 select t.*,"xm" type from (SELECT date_sub(curdate(),interval 1 day) cap_date,'1' attr,count(*) total,"电子邮件" stype from email_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"即时通信" stype from im_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"文件传输" stype from file_transfer_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"http发布" stype from http_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"网盘" stype from netdisk_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"其他" stype from other_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)) t;
+      delete from xmts_fx2 where type='xm';
+      insert into xmts_fx select dip,count(*) total,"xm_dip" type from (select cap_date,dip,"host" type from email_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip,"host" type from im_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip,"host" type from file_transfer_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip,"host" type from http_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip,"host" type from netdisk_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,dip,"host" type from other_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)) t group by t.dip order by total desc limit 5;
+      insert into xmts_fx select sip,count(*) total,"xm_sip" type from (select cap_date,sip,"host" type from email_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip,"host" type from im_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip,"host" type from file_transfer_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip,"host" type from http_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip,"host" type from netdisk_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION all select cap_date,sip,"host" type from other_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day)) t group by t.sip order by total desc limit 5;
+      INSERT into xmts_fx2 select cap_date,dport,count(1) total,"电子邮件" stype,"xm_dip_dport" type from email_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dport limit 10;
+      INSERT into xmts_fx2 select cap_date,dport,count(1) total,"即时通信" stype,"xm_dip_dport" type from im_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dport limit 10;
+      INSERT into xmts_fx2 select cap_date,dport,count(1) total,"文件传输" stype,"xm_dip_dport" type from file_transfer_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dport limit 10;
+      INSERT into xmts_fx2 select cap_date,dport,count(1) total,"http发布" stype,"xm_dip_dport" type  from http_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dport limit 10;
+      INSERT into xmts_fx2 select cap_date,dport,count(1) total,"网盘" stype,"xm_dip_dport" type from netdisk_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dport limit 10;
+      INSERT into xmts_fx2 select cap_date,dport,count(1) total,"其他" stype,"xm_dip_dport" type from other_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dport limit 10;
+      INSERT into xmts_fx2 select cap_date,dip,count(1) total,"电子邮件" stype,"xm_dip" type from email_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dip limit 10;
+      INSERT into xmts_fx2 select cap_date,dip,count(1) total,"即时通信" stype,"xm_dip" type from im_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dip limit 10;
+      INSERT into xmts_fx2 select cap_date,dip,count(1) total,"文件传输" stype,"xm_dip" type from file_transfer_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dip limit 10;
+      INSERT into xmts_fx2 select cap_date,dip,count(1) total,"http发布" stype,"xm_dip" type  from http_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dip limit 10;
+      INSERT into xmts_fx2 select cap_date,dip,count(1) total,"网盘" stype,"xm_dip" type from netdisk_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dip limit 10;
+      INSERT into xmts_fx2 select cap_date,dip,count(1) total,"其他" stype,"xm_dip" type from other_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by dip limit 10;
+      INSERT into xmts_fx2 select cap_date,sip,count(1) total,"电子邮件" stype,"xm_sip" type from email_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by sip limit 10;
+      INSERT into xmts_fx2 select cap_date,sip,count(1) total,"即时通信" stype,"xm_sip" type from im_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by sip limit 10;
+      INSERT into xmts_fx2 select cap_date,sip,count(1) total,"文件传输" stype,"xm_sip" type from file_transfer_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by sip limit 10;
+      INSERT into xmts_fx2 select cap_date,sip,count(1) total,"http发布" stype,"xm_sip" type  from http_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by sip limit 10;
+      INSERT into xmts_fx2 select cap_date,sip,count(1) total,"网盘" stype,"xm_sip" type from netdisk_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by sip limit 10;
+      INSERT into xmts_fx2 select cap_date,sip,count(1) total,"其他" stype,"xm_sip" type from other_sm_alert_log where cap_date = date_sub(curdate(),interval 1 day) group by sip limit 10;
+      insert into wlxw_fx select t.cap_date,sum(t.total) total,"week_total" as type from (select cap_date, count(1) total,"week_total" as type from web_behavior_audit_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from ssl_behavior_audit_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from mail_behavior_audit_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from file_behavior_audit_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date
+      UNION all select cap_date, count(1) total,"week_total" as type from dns_behavior_audit_log where cap_date >= date_sub(curdate(),interval 7 day) and cap_date &lt;= date_sub(curdate(),interval 1 day) group by cap_date) t group by t.cap_date;
+      insert into wlxw_fx2 select t.*,"wlxw" type from (SELECT date_sub(curdate(),interval 1 day) cap_date,'1' attr,count(*) total,"WEB" stype from web_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"SSL" stype from ssl_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"电子邮件" stype from mail_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"文件传输" stype from file_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT date_sub(curdate(),interval 1 day),'1' attr,count(*),"DNS" stype from dns_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)) t;
+      insert into wlxw_fx select t.protocol,count(1) total,"protocol" type from (SELECT protocol from web_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT protocol from ssl_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT protocol from mail_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT protocol from file_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT protocol from dns_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)) t group by t.protocol;
+      insert into wlxw_fx select t.dip,count(1) total,"dip" type from (SELECT dip from web_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT dip from ssl_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT dip from mail_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT dip from file_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT dip from dns_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)) t group by t.dip order by total desc limit 5;
+      insert into wlxw_fx select t.domain,count(1) total,"domain" type from (
+      SELECT domain from web_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)
+      UNION ALL SELECT request from dns_behavior_audit_log where cap_date = date_sub(curdate(),interval 1 day)) t group by t.domain order by total desc limit 5;
+  </update>
+  <insert id="insertIplocates" parameterType="java.util.List">
+    insert into mcjc_ip_locate (id,src_ip,des_ip,src_longtitude,src_latitude,des_longtitude,des_latitude,src_total,des_total)
+    values
+    <foreach collection="iplocates" item="iplocate" index="index" separator="," >
+      (#{iplocate.id},#{iplocate.sip},#{iplocate.dip},#{iplocate.srcLongtitude},#{iplocate.srcLatitude},#{iplocate.desLongtitude},#{iplocate.desLatitude},#{iplocate.srcTotal},#{iplocate.desTotal})
+    </foreach>
+  </insert>
+</mapper>

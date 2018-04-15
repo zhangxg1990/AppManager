@@ -1,0 +1,61 @@
+<!-----角色管理------>
+<div ng-controller="roleManageCtrl" class="box-main-user-manage">
+    <!----搜索 ---->
+    <div class="row by_top">
+        <div class="col-sm-3 by_top_3">
+            <form>
+                <div class="form-group form-group-sm">
+                    <div class="input-group input-group-md">
+                        <input type="text" class="form-control input-sm" placeholder="请输入角色名" ng-model="searchRoleStr" />
+                        <span class="input-group-addon input-sm" ng-click="searchRoleClick();" style="cursor: pointer;">
+                            <i class="glyphicon glyphicon-search red"></i></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-9 by_top_9">
+            <span class="btn btn-default btn-sm" ng-click="addRoleClick();">
+                <i class="glyphicon glyphicon-plus"></i><span> 添加角色</span>
+            </span>
+        </div>
+    </div>
+    <div class="row box-table-parent-user-manage">
+        <div class="box-table-user-manage">
+            <table class="table table-bordered temp_table-header table_header_top">
+                <thead>
+                    <tr>
+                        <th class="th-user-manage">角色名称</th>
+                        <th class="th-user-manage">角色描述</th>
+                        <th class="th-user-manage">角色权限</th>
+                        <th class="th-user-manage">更新时间</th>
+                        <th class="th-btn-group-user-manage" style="width: 162px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="role in roleList">
+                        <td class="td-user-manage">{{role.name}}</td>
+                        <td class="td-user-manage">{{role.note}}</td>
+                        <td class="td-user-manage">{{role.authorityNames}}</td>
+                        <td class="td-user-manage">{{role.lastModifiedTime}}</td>
+                        <td class="td-btn-group-user-manage">
+                            <span class="btn btn-sm btn-success by_but_bule"
+                                  ng-click="editRoleClick(role);">
+                                <i class="glyphicon glyphicon-edit icon-white"></i> 编辑
+                            </span>
+                            <span class="btn btn-sm btn-yellow by_but_red"
+                                  ng-click="deleteRoleClick(role);">
+                                <i class="glyphicon glyphicon-trash icon-white"></i> 删除
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--paging -->
+        <div ng-show="isPaging" class="col-sm-12 box-paging-user-manage">
+            <div>
+                <ts-paging page-total="pageTotal" page-size="pageSize" group-size="groupSize" page-change="pageChangeFn(value)"></ts-paging>
+            </div>
+        </div>
+    </div>
+</div>

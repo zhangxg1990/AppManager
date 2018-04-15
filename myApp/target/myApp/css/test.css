@@ -1,0 +1,14 @@
+.test-table-tr{
+    width:100%;
+}
+.test-table-th{
+    /*min-width: 120px;*/
+    width:auto;
+    white-space: nowrap;
+}
+.test-table-td{
+    /*min-width: 100px;*/
+    width:auto;
+    text-align: center;
+    white-space: nowrap;
+}

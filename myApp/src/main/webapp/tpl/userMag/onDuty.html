@@ -1,0 +1,60 @@
+<!-----值班状态------>
+<div ng-controller="onDutyCtrl" class="box-main-user-manage">
+
+    <!----搜索 ---->
+    <div class="row by_top" style="width: 216px;">
+        <div class="col-sm-12 by_top_3">
+            <form name="myForm">
+                <div class="form-group form-group-sm">
+                    <div class="input-group input-group-md">
+                        <input  type="text" class="form-control input-sm " placeholder="请输入用户名" />
+                        <span class="input-group-addon input-sm" style="cursor: pointer;">
+                            <i class="glyphicon glyphicon-search red"></i></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row box-table-parent-user-manage">
+        <div class="box-table-user-manage">
+
+            <!-- table-header -->
+            <table class="table table-bordered temp_table-header table_header_top" id="tab_duty">
+                <thead>
+                <tr>
+                    <th class="th-user-manage">用户名称</th>
+                    <th class="th-user-manage">用户角色</th>
+                    <th class="th-user-manage">联系方式</th>
+                    <th class="th-user-manage">登录时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- class="{{item.css}}" -->
+                <tr ng-repeat="item in onDutyList" class="table_common">
+                    <td class="td-user-manage">{{item.name}}</td>
+                    <td class="td-user-manage">{{item.role}}</td>
+                    <td class="td-user-manage">{{item.telephone}}</td>
+                    <td class="td-user-manage">{{item.loginTime}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--paging -->
+        <div class="col-sm-12 box-paging-user-manage">
+            <!--<ul class="pagination pagination-sm pagination-centered paging-user-manage">-->
+                <!--<li><a href="#">上一页</a></li>-->
+                <!--<li class="active">-->
+                    <!--<a href="#">1</a>-->
+                <!--</li>-->
+                <!--<li><a href="#">2</a></li>-->
+                <!--<li><a href="#">3</a></li>-->
+                <!--<li><a href="#">4</a></li>-->
+                <!--<li><a href="#">下一页</a></li>-->
+            <!--</ul>-->
+            <!--<div>-->
+                <!--<ts-paging page-list="onDutyList" page-size="3" group-size="5" page-change="pageChangeFn(value)"></ts-paging>-->
+            <!--</div>-->
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="monitorApp">
+<head>
+    <meta charset="utf-8">
+    <!-- 优先使用IE最新版本和chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <!-- 为移动设备添加 viewport -->
+    <!--<meta name="viewport" content="initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no">-->
+
+    <!-- 禁止表单自动填充；禁止显示表单历史记录 ；Firefox-->
+    <!--<meta http-equiv="Pragma" content="no-cache"/>-->
+    <!--<meta http-equiv="cache-control" content="no-cache"/>-->
+    <!--<meta http-equiv="Expires" content="0"/>-->
+    <!--<meta http-equiv="Cache-Control" content="no-store">-->
+
+    <title>互联网接入口保密监测平台应用系统</title>
+
+    <!-- The styles -->
+    <link id="bs-css" href="css/charisma/bootstrap-cerulean.min.css" rel="stylesheet">
+    <link href="css/charisma/charisma-app.css" rel="stylesheet">
+    <link href="css/gojs/goSamples.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/loading.css">      <!-- 加载进度条loading -->
+    <!-- angular css -->
+    <link rel="stylesheet" href="css/angular-tree-control/tree-control.css">
+
+    <!-- datePicker ;bootstrap风格的日历插件 -->
+    <link rel="stylesheet" href="css/bootstrap/datePicker/daterangepicker-bs3.css">
+    <!-- multi-select；bootstrap风格的下拉框多选插件 -->
+    <link rel="stylesheet" href="css/bootstrap/multi-select/bootstrap-multiselect.css">
+
+    <script src="vendor/jquery/2.2.0/jquery-2.2.0.min.js"></script>
+
+    <script src="vendor/angular/1.5.11/angular.js"></script>
+
+    <script src="vendor/bootstrap/3.3.6/bootstrap.min.js"></script>
+
+    <script src="vendor/angular/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script src="vendor/angular/angular-ui-route/angular-ui-router.js"></script>
+    <script src="vendor/angular/angular-tree-control.js"></script>
+    <!--<script src="vendor/angular/ng-table/ng-table.min.js"></script>-->
+
+    <!-- datePicker ;bootstrap风格的日历插件 -->
+    <script src="vendor/bootstrap/datePicker/moment.js"></script>
+    <script src="vendor/bootstrap/datePicker/daterangepicker.js"></script>
+    <!-- multi-select;bootstrap风格的多选下拉框 -->
+    <script src="vendor/bootstrap/multi-select/bootstrap-multiselect.js"></script>
+    <!-- echarts -->
+    <!--<script src="vendor/echarts/3.2.2/echarts.js"></script>-->
+    <!-- echarts -->
+    <!--<script src="js/gojs/go.js"></script>-->
+    <!--<script src="js/gojs/goSamples.js"></script>-->
+
+    <!-- js文件 -->
+    <script src="js/app.js"></script>
+    <script src="js/route.js"></script>
+
+    <!-- 自定义工具类 ，配置文件、后台通讯类 -->
+    <script src="js/common/config.js"></script>
+    <script src="js/common/util.js"></script>
+    <script src="js/common/trx.js"></script>
+    <!--<script src="js/common/gsView.js"></script>-->
+
+    <!--<script src="js/common/service.js"></script>-->
+    <!--<script src="js/vo/alertVo.js"></script>-->
+    <script src="js/vo/dataVo.js"></script>
+
+
+    <!-- 自定义指令 paging -->
+    <script src="js/directive/paging.js"></script>
+    <script src="js/directive/common.js"></script>
+    <script src="js/directive/loading.js"></script>
+
+    <!-- service，包括所有模块的后台通讯方法 -->
+    <script src="js/service/mainService.js"></script>
+
+    <script src="js/controller/mainCtrl.js"></script>
+
+    <!-- 公用的一些功能 : 提示框-->
+    <script src="js/controller/common/alertPopCtrl.js"></script>
+
+    <!--&lt;!&ndash; 自定义指令 &ndash;&gt;-->
+    <!--<script src="js/directive/paging.js"></script>-->
+
+    <!-- device controller -->
+    <!--<script src="js/controller/device/deviceCtrl.js"></script>-->
+    <!-- policy controller -->
+    <!--<script src="js/controller/policy/policyCtrl.js"></script>-->
+    <script src="js/controller/policy/policyCtrl_2.js"></script>
+    <!-- alert controller -->
+    <script src="js/controller/alert/alertCtrl.js"></script>
+    <script src="js/controller/alert/dealAlertCtrl.js"></script>
+    <!-- audit controller -->
+    <!--<script src="js/controller/audit/auditCtrl.js"></script>-->
+    <script src="js/controller/audit/auditCtrl_2.js"></script>
+    <!-- device register -->
+    <script src="js/controller/device/deviceRegisterCtrl.js"></script>
+    <script src="js/controller/device/devicePopCtrl.js"></script>
+    <!-- analyze controller -->
+    <!--<script src="js/controller/analyze/analyzeCtrl.js"></script>-->
+    <script src="js/controller/analyze/analyzeCtrl_2.js"></script>
+    <!-- manage controller -->
+    <script src="js/controller/manage/manageCtrl.js"></script>
+    <script src="js/controller/manage/managePopCtrl.js"></script>
+    <script src="js/controller/userMag/userMagCtrl.js"></script>
+    <!-- user manage -->
+    <script src="js/controller/userMag/userAuthorityCtrl.js"></script>
+    <script src="js/controller/userMag/userPopCtrl.js"></script>
+    <!-- role manage -->
+    <script src="js/controller/userMag/roleManageCtrl.js"></script>
+    <script src="js/controller/userMag/rolePopCtrl.js"></script>
+    <!-- on duty manage -->
+    <script src="js/controller/userMag/onDutyCtrl.js"></script>
+
+    <script src="js/controller/common/timeOutCtrl.js"></script>
+
+    <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <!--<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>-->
+    <![endif]-->
+    <!-- The fav icon -->
+    <!--<link rel="shortcut icon" href="img/favicon.ico">-->
+</head>
+<body>
+<div  ng-controller="mainCtrl" style="height: 100%;">
+    <!-- 登录页面 -->
+    <div ng-show="isLogin" ng-include="'tpl/login.html'"></div>
+    <!-- 主内容页面 ： 导航栏+内容 -->
+    <div ng-show="!isLogin" ng-include="'tpl/monitor.html'"></div>
+
+    <!--<div style="width: 800px;height: 60px;background-color: #f7ecb5">-->
+        <!--<ts-paging page-list="dataList" page-size="5" group-size="5" page-change="pageChangeFn(value);">-->
+            <!--ts paging !-->
+        <!--</ts-paging>-->
+    <!--</div>-->
+
+    <!--<div style="width: 800px;height: 60px;background-color: #FCD5CD">-->
+        <!--<ts-hello page-list="dataList" page-size="5" group-size="5" page-change="pageChangeFn(value);">ts hello !</ts-hello>-->
+    <!--</div>-->
+
+    <!-- 系统提示，在页面顶部显示 -->
+    <!--<div ng-show="isSysAlert" class="alert alert-danger" style="top: 0px;left: 0px;right: 0px;position: absolute;height: 60px;transition: 3s all linear;">-->
+        <!--{{sysAlertMessage}}-->
+        <!--<a class="close" ng-click="closeSysAlert();">&times;</a>-->
+    <!--</div>-->
+</div>
+</body>
+</html>

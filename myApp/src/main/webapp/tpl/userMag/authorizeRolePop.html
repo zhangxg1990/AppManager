@@ -1,0 +1,37 @@
+<!-- 用户授权角色 弹框 -->
+<!--<div class="modal" style="width: 360px;">-->
+    <!--<div class="modal-dialog"  style="width: 360px;">-->
+        <div class="modal-content">
+            <div class="modal-header model-blue">
+                <span class="model-title">{{title}}</span>
+            </div>
+            <div class="modal-body">
+                <form style="text-align: center;">
+                    <div class="row form-group">
+                        <div class="col-sm-8" style="text-align: right;">
+                            <input type="text" class="form-control input-sm"
+                                   ng-model="searchRoleStr">
+                        </div>
+                        <div class="col-sm-4" style="text-align: left;">
+                            <span class="btn btn-sm btn-default" ng-click="searchRoleClick();">搜索</span>
+                        </div>
+
+                    </div>
+                    <div class="row model-form-group-css" style="text-align: center;">
+
+                        <select class="form-control" size="10" ng-model="vm.role"
+                                ng-options="item.name for item in rolesList">
+                            <!--<option ng-repeat="item in rolesList">{{item.name}}</option>-->
+                        </select>
+
+                    </div>
+                    <div class="modal-footer modal-foot-min-css">
+                        <span class="btn btn-sm btn-success" ng-click="okClick();">确定</span>
+                        <span class="btn btn-sm btn-warning" ng-click="cancelClick();">取消</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <!--</div>-->
+<!--</div>-->
+

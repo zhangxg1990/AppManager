@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.topsec.ti.zxg.mapper.DeviceMapper">
+  <select id="getDevicesByTp" resultType="Device">
+        select * from device_topology_info dti /*left join (select * from system_status_log T1
+        where not exists(select 1 from system_status_log WHERE status = 'on' and device_id=T1.device_id AND id>T1.id)
+        ) tmp on dti.device_id = tmp.device_id*/
+    </select>
+  <select id="getDevices" parameterType="java.lang.String" resultType="Device">
+        select * from (select dti.* from device_topology_info dti where dti.parent_id=#{device_id} union all
+         select dti.* from device_topology_info dti where dti.device_id=#{device_id}) tmp left join (select * from system_status_log T1
+        where not exists(select 1 from system_status_log WHERE status = 'on' and device_id=T1.device_id AND id>T1.id)
+        ) tmp1 on tmp.device_id = tmp1.device_id
+    </select>
+
+  <select id="getDeviceById" resultType="Device">
+        select * from device_topology_info dti left join (select * from system_status_log T1
+        where T1.device_id =#{device_id} and not exists(select 1 from system_status_log WHERE status = 'on' and device_id=T1.device_id AND id>T1.id)
+        ) tmp on dti.device_id = tmp.device_id where dti.device_id=#{device_id}
+    </select>
+  <!--检测器总量和管理中心总量-->
+  <select id="deviceTotal" resultType="java.util.HashMap">
+        select case device_type
+        when 1 THEN '检测器活跃数量' WHEN 2 THEN '管理中心活跃数量' end device_type ,count(*)  from device_topology_info group by device_type
+    </select>
+  <!--检测器活跃总量和管理中心活跃总量-->
+  <select id="deviceActiveTotal" resultType="java.util.HashMap">
+        select case device_type
+        when 1 THEN '检测器活跃数量' WHEN 2 THEN '管理中心活跃数量' end device_type ,count(*)  from device_topology_info group by device_type
+    </select>
+  <!--管理中心分组统计-->
+  <select id="glzxGroupTotal" resultType="java.util.HashMap">
+        with RECURSIVE tmp as
+        (select dti.* from device_topology_info dti where dti.device_id=#{centerId}
+        union all select dti_chr.*  from device_topology_info dti_chr
+        inner join tmp c on c.device_id = dti_chr.parent_id) select CASE level_class
+                WHEN 1 THEN '1级管理中心' WHEN '2' THEN '2级管理中心'
+                WHEN 3 THEN '3级管理中心' WHEN '4' THEN '4级管理中心'  end level_class,count(*)  from tmp where level_class &lt;255 group by level_class;
+    </select>
+
+  <select id="getDevicesByCenterId" resultType="Device">
+    select * from device_topology_info d
+    <where>
+      <!--             <include refid="device_where"></include>-->
+
+      and d.parent_id=#{parent_id}
+      <if test="device_types !=null and device_types.length &gt;=1">
+        and
+        <foreach collection="device_types" item="device_type" open=" d.device_type in (" close=")" separator=",">
+          #{device_type}
+        </foreach>
+      </if>
+    </where>
+
+  </select>
+    <insert id="addDevice" parameterType="Device">
+        insert into device_topology_info(device_id,parent_id,device_type,level_info,level_class
+        ,mem_total,cpu_info,disk_info,soft_version,interface,organs,address)
+        values(#{device.device_id}, #{device.parent_id}, #{device.device_type}, #{device.level_info}, #{device.level_class}
+        , #{device.mem_total}, #{device.cpu_info}, #{device.disk_info}, #{device.soft_version}, #{device.interface_info}
+        , #{device.organs}, #{device.address})
+    </insert>
+
+</mapper>

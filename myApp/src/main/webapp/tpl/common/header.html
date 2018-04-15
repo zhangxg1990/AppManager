@@ -1,0 +1,41 @@
+<div class="navbar navbar-default main-head" role="navigation">
+    <!--<div class="col-sm-4" style="width: 30%; padding: 0px;">-->
+    <div style="width: 30%; padding: 0px;float: left;">
+        <img src="assets/img/logo.png" width="" height="60" style="float: left;"/>
+    </div>
+    <!--<div class="col-sm-6" style="width: 54%;padding: 0px;">-->
+    <div style="width: 54%;padding: 0px;float: left;">
+        <!-- 导航栏 按钮 -->
+        <div ng-include="'tpl/common/navBar.html'"></div>
+    </div>
+    <!--退出系统-->
+    <!--<div class="col-sm-2" style="width: 8%;padding: 5px; float: right;">-->
+    <div style="width: 16%;padding-right: 10px; float: left;text-align: right;">
+        <!--用户管理 star-->
+        <!--<span class="by_nav_g" ng-click="menuClick(7)" style="display:inline-block;margin-top:15px; margin-left: 15px;">用户管理</span>-->
+        <!--用户管理 end-->
+        <!--<ul class="collapse  nav navbar-nav top-menu" style="display:inline-block;float:left;margin-top:4px;">-->
+        <ul class="collapse  nav navbar-nav top-menu" style="display:inline-block;margin-top:4px;padding-right: 10px;float: right;">
+            <li class="dropdown">
+                <a href="#" data-toggle="dropdown" class="by_nav_name" style="text-align: right;">
+                    <i class="glyphicon glyphicon-user"></i>
+                    <!--123456789099@yahoo.com.cn-->
+                    {{userName}}
+                    <span class="caret"></span>
+                </a>
+                <!--<ul class="dropdown-menu" role="menu" style="left:-70px; border-radius: 4px; padding-left: 0px;padding-right: 0px;">-->
+                <ul class="dropdown-menu" role="menu" style="clear:both;border-radius: 4px;">
+                    <li ng-show="userOK"><a  ng-click="menuClick(7);"><i class="glyphicon glyphicon-user"></i>&nbsp;用户管理</a></li>
+                    <li ng-show="userOK" class="divider"></li>
+
+                    <!--<li ng-show="!userOK&&roleOk"><a  ng-click="menuClick(7);"><i class="glyphicon glyphicon-user"></i>&nbsp;角色管理</a></li>-->
+                    <!--<li ng-show="!userOK&&roleOk" class="divider"></li>-->
+
+                    <!--<li><a  href={{fnListUrl}} target="_blank"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看后台方法列表</a></li>-->
+                    <!--<li class="divider"></li>-->
+                    <li><a  ng-click="loginOutClick();"><i class="glyphicon glyphicon-off"></i>&nbsp;退出系统</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: myApp
+Implementation-Version: 1.0-SNAPSHOT
+Archiver-Version: Plexus Archiver
+Built-By: zhang
+Implementation-Vendor-Id: com.zxg
+Created-By: Apache Maven 3.5.0
+Build-Jdk: 1.8.0_65
+Main-Class: com.topsec.ti.zxg.MagicjcWebApplication
+

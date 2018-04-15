@@ -1,0 +1,205 @@
+<div ng-controller="analyzeCtrl" class="box-analyze" style="top:-10px;">
+     <!-- menu -->
+     <div class="row col-sm-12 box-menu-analyze">
+          <div class="col-sm-3 box-title-analyze">
+               <label class="title-analyze">数据分析：{{title}}</label>
+          </div>
+          <div class="col-sm-9 box-menu-btn-analyze">
+               <!--<span class="btn btn-sm btn-success" ng-click="displayViewChange(1);">告警数据分析</span>-->
+               <!--<span class="btn btn-sm btn-success" ng-click="displayViewChange(2);">处置信息分析</span>-->
+               <!--<span class="btn btn-sm btn-success" ng-click="displayViewChange(3);">设备状态统计</span>-->
+               <!--<span class="btn btn-sm btn-warning">导出报表</span>-->
+          </div>
+     </div>
+     <!-- 告警数据分析-->
+     <!--<div ng-show="isAlertData" class="col-sm-12 box-chart-list">-->
+          <!--<div class="row box-chart-row">-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--所属检测器-->
+                         <!--<div  id="id_alertDetector" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--网络应用类型-->
+                         <!--<div  id="id_alertNetAppType" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+          <!--</div>-->
+          <!--<div class="row box-chart-row">-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--文件类型-->
+                         <!--<div  id="id_alertFileType" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--时间-->
+                         <!--<div  id="id_alertTime" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+          <!--</div>-->
+          <!--<div class="row box-chart-row">-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--检测策略-->
+                         <!--<div  id="id_alertCheckMethod" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+          <!--</div>-->
+     <!--</div>-->
+     <!--&lt;!&ndash; 处置信息分析&ndash;&gt;-->
+     <!--<div ng-show="isDealMsg"  class="col-sm-12 box-chart-list">-->
+          <!--<div class="row box-chart-row">-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--所属检测器-->
+                         <!--<div  id="id_dealDetector" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--网络应用类型-->
+                         <!--<div  id="id_dealNetAppType" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+          <!--</div>-->
+          <!--<div class="row box-chart-row">-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--文件类型-->
+                         <!--<div  id="id_dealFileType" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--时间-->
+                         <!--<div  id="id_dealTime" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+          <!--</div>-->
+          <!--<div class="row box-chart-row">-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--检测策略-->
+                         <!--<div  id="id_dealCheckMethod" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--判定状态-->
+                         <!--<div  id="id_dealCheckState" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+          <!--</div>-->
+     <!--</div>-->
+     <!--&lt;!&ndash; 设备状态分析&ndash;&gt;-->
+     <!--<div ng-show="isDeviceStatus" class="col-sm-12 box-chart-list">-->
+          <!--<div  class="row box-chart-row">-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--设备类型-->
+                         <!--<div  id="id_deviceType" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--部署位置-->
+                         <!--<div  id="id_deployPosition" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+          <!--</div>-->
+          <!--<div class="row box-chart-row">-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--网络流量-->
+                         <!--<div  id="id_netFlowRate" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                         <!--硬件参数-->
+                         <!--<div  id="id_hardwareParam" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+          <!--</div>-->
+          <!--<div class="row box-chart-row">-->
+               <!--<div class="col-sm-6 box-chart">-->
+                    <!--<div class="sub-box-chart">-->
+                        <!--故障频率-->
+                         <!--<div  id="id_faultRate" class="item-chart"></div>-->
+                    <!--</div>-->
+               <!--</div>-->
+          <!--</div>-->
+     <!--</div>-->
+
+    <div class="row col-md-12" style="margin-top:10px;">
+         <!--第一张charts图 -->
+         <div class=" col-md-4">
+              <div class="box-inner">
+                   <div class="box-header well" data-original-title="">
+                        <h2><i class="glyphicon glyphicon-list-alt"></i> Pie</h2>
+
+                        <div class="box-icon">
+                             <a href="#" class="btn btn-setting btn-round btn-default"><i
+                                     class="glyphicon glyphicon-cog"></i></a>
+                             <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                                     class="glyphicon glyphicon-chevron-up"></i></a>
+                             <a href="#" class="btn btn-close btn-round btn-default"><i
+                                     class="glyphicon glyphicon-remove"></i></a>
+                        </div>
+                   </div>
+                   <div class="box-content">
+                        <div  style="height:300px"></div>
+                   </div>
+              </div>
+         </div>
+
+         <!--第二张charts图 -->
+         <div class=" col-md-4">
+              <div class="box-inner">
+                   <div class="box-header well" data-original-title="">
+                        <h2><i class="glyphicon glyphicon-list-alt"></i> Pie</h2>
+
+                        <div class="box-icon">
+                             <a href="#" class="btn btn-setting btn-round btn-default"><i
+                                     class="glyphicon glyphicon-cog"></i></a>
+                             <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                                     class="glyphicon glyphicon-chevron-up"></i></a>
+                             <a href="#" class="btn btn-close btn-round btn-default"><i
+                                     class="glyphicon glyphicon-remove"></i></a>
+                        </div>
+                   </div>
+                   <div class="box-content">
+                        <div style="height:300px"></div>
+                   </div>
+              </div>
+         </div>
+
+         <!--第三张charts图 -->
+         <div class="col-md-4">
+              <div class="box-inner">
+                   <div class="box-header well" data-original-title="">
+                        <h2><i class="glyphicon glyphicon-list-alt"></i> Pie</h2>
+
+                        <div class="box-icon">
+                             <a href="#" class="btn btn-setting btn-round btn-default"><i
+                                     class="glyphicon glyphicon-cog"></i></a>
+                             <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                                     class="glyphicon glyphicon-chevron-up"></i></a>
+                             <a href="#" class="btn btn-close btn-round btn-default"><i
+                                     class="glyphicon glyphicon-remove"></i></a>
+                        </div>
+                   </div>
+                   <div class="box-content">
+                        <div  style="height:300px"></div>
+                   </div>
+              </div>
+         </div>
+
+    </div>
+
+
+</div>

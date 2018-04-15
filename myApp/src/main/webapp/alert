@@ -1,0 +1,21 @@
+查询告警列表未post请求,
+发送json数据　：查询字段有risk　风险,cap_date
+url请求参数有alertType:告警类型有１５张表，对应类型
+TROJANATTACK("trojan_attack_alert_log"),
+EXPLOITATTACK("exploit_attack_alert_log"),
+MALWAREATTACK("malware_attack_alert_log"),
+OTHERATTACK("other_attack_alert_log"),
+ABNORMALATTACK("abnormal_attack_alert_log"),
+IP("ip_alert_log"),
+DOMAIN("domain_alert_log"),
+URL("url_alert_log"),
+ACCOUT("account_alert_log"),
+EMAIL("email_sm_alert_log"),
+IM("im_sm_alert_log"),
+FILETRANFER("file_transfer_sm_alert_log"),
+HTTP("http_sm_alert_log"),
+NETDISK("netdisk_sm_alert_log"),
+OTHERSECURITY("other_sm_alert_log");　　
+
+新增告警处置信息 alertDisposalInfo  post请求　　json数据　返回alertDisposalInfo对象
+alertDecision//告警意见  disposalOpinion//处置判定　//disposalPerson 处置人　//disposalPerson

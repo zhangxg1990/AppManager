@@ -1,0 +1,9 @@
+<authorities>
+  <authority id="1" name="超级权限" url="/"></authority>
+  <authority id="100" name="策略展示" url="/policy"></authority>
+  <authority id="200" name="告警处置" url="/alert"></authority>
+  <authority id="300" name="网络审计" url="/netprotocol"></authority>
+  <authority id="400" name="检测器管理" url="/detector"></authority>
+  <authority id="500" name="用户管理" url="/user"></authority>
+  <authority id="600" name="角色管理" url="/role"></authority>
+</authorities>

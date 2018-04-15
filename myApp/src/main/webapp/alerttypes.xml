@@ -1,0 +1,168 @@
+<alerttype>
+  <alertcommonfield>
+    <field name="device_id" alias="检测器ID"/>
+    <field name="alert_id" alias="告警ID"/>
+    <field name="organs" alias="检测器名称"/>
+    <field name="id" alias="自增ID"/>
+    <field name="rule_id" alias="关键词告警时，匹配的规则ID"/>
+    <field name="sip" alias="源ip地址"/>
+    <field name="sport" alias="源端口"/>
+    <field name="smac" alias="源mac地址"/>
+    <field name="dip" alias="目的ip地址"/>
+    <field name="dport" alias="目的端口"/>
+    <field name="dmac" alias="目标mac地址"/>
+    <field name="time" alias="告警数据采集时间"/>
+    <field name="start_time" alias="开始时间" />
+    <field name="end_time" alias="结束时间" />
+    <field name="risk" alias="告警级别"/>
+    <field name="cap_date" alias="告警数据采集日期，分区字段；格式为“yyyy-MM-dd”"/>
+    <field name="trojan_type" alias="木马类型。1（特种木马）、2（普通木马）、3（远控）、4（其他）"/>
+  </alertcommonfield>
+  <securitycommonfield extendFiled = "alertcommonfield">
+    <field name="sm_inpath" alias="检测器ID"/>
+    <field name="alert_id" alias="告警ID"/>
+    <field name="organs" alias="检测器名称"/>
+    <field name="id" alias="自增ID"/>
+    <field name="rule_id" alias="关键词告警时，匹配的规则ID"/>
+    <field name="sip" alias="源ip地址"/>
+    <field name="sport" alias="源端口"/>
+    <field name="smac" alias="源mac地址"/>
+    <field name="dip" alias="目的ip地址"/>
+    <field name="dport" alias="目的端口"/>
+    <field name="dmac" alias="目标mac地址"/>
+    <field name="time" alias="告警数据采集时间"/>
+    <field name="risk" alias="告警级别"/>
+    <field name="cap_date" alias="告警数据采集日期，分区字段；格式为“yyyy-MM-dd”"/>
+    <field name="trojan_type" alias="木马类型。1（特种木马）、2（普通木马）、3（远控）、4（其他）"/>
+  </securitycommonfield>
+<alerttype name="攻击窃密告警" alias="攻击窃密告警" ordinal="0">
+  <alerttype name="exploitAttack" alias="漏洞利用窃密攻击告警" ordinal="1" class="com.topsec.ti.zxg.domain.alert.attack.ExploitAttack" extendFiled = "alertcommonfield">
+    <alert>
+      <field name="attack_type" alias="攻击类型"/>
+      <field name="application" alias="攻击适用的应用程序"/>
+      <field name="os" alias="攻击适用的操作系统"/>
+    </alert>
+  </alerttype>
+  <alerttype name="malwareAttack" alias="恶意程序窃密攻击告警" ordinal="2" class="com.topsec.ti.zxg.domain.alert.attack.MalwareAttack" extendFiled = "alertcommonfield">
+    <alert>
+      <field name="malware_type" alias="恶意程序种类"/>
+      <field name="malware_name" alias="名称"/>
+      <field name="protocol" alias="传输该恶意程序的应用协议"/>
+      <field name="sender" alias="发送者"/>
+      <field name="recver" alias="接收者"/>
+      <field name="cc" alias="邮件抄送者"/>
+      <field name="bcc" alias="邮件密送者"/>
+      <field name="subject" alias="邮件主题"/>
+      <field name="mail_from" alias="认证过程中MAIL FROM命令提交的邮件发送者"/>
+      <field name="rcpt_to" alias="认证过程中RCPT TO命令提交的邮件接收者"/>
+      <field name="ehlo" alias="认证过程中EHLO命令提交的IP信息"/>
+    </alert>
+</alerttype>
+<alerttype name="otherAttack" alias="其他攻击窃密检测告警" ordinal="3" class="com.topsec.ti.zxg.domain.alert.attack.OtherAttack" extendFiled = "alertcommonfield">
+  <alert>
+    <field name="descr" alias="攻击窃密告警描述"/>
+  </alert>
+</alerttype>
+<alerttype name="trojanAttack" alias="木马攻击窃密告警" ordinal="4" class="com.topsec.ti.zxg.domain.alert.attack.TrojanAttack" extendFiled = "alertcommonfield">
+  <alert>
+    <field name="trojan_id" alias="木马分类编号"/>
+    <field name="prevalence" alias="攻击行为的流行程度。1（高）、2（中）、3（低）"/>
+    <field name="attack_range" alias="攻击的适用范围"/>
+    <field name="application" alias="攻击适用的应用程序"/>
+    <field name="os" alias="攻击适用的操作系统"/>
+    <field name="trojan_name" alias="攻击适用的应用程序"/>
+    <field name="descr" alias="//木马类型。1（特种木马）、2（普通木马）、3（远控）、4（其他）"/>
+  </alert>
+</alerttype>
+</alerttype>
+<alerttype name="未知攻击窃密告警" alias="未知攻击窃密告警" ordinal="1">
+  <alerttype name="abnormalAttack" alias="未知攻击窃密告警" ordinal="1" class="com.topsec.ti.zxg.domain.alert.AbnormalAttack" extendFiled = "alertcommonfield">
+    <alert>
+      <field name="alert_type" alias="未知攻击窃密类型：可疑心跳保活行为（1）、远程控制行为（2）、异常私有协议（3）、异常通用代理行为（4）"/>
+      <field name="alert_policy" alias="未知攻击窃密判断主要依据，触发未知攻击窃密原因"/>
+      <field name="alert_desc" alias="未知攻击窃密判断描述及上下文"/>
+    </alert>
+  </alerttype>
+</alerttype>
+<alerttype name="目标审计告警" alias="目标审计告警" ordinal="2">
+  <alerttype name="accout" alias="帐号审计告警" ordinal="1" class="com.topsec.ti.zxg.domain.alert.audit.Accout" extendFiled = "alertcommonfield">
+    <alert>
+      <field name="sender" alias="发送人帐号"/>
+      <field name="receiver" alias="接受人帐号列表"/>
+      <field name="cc" alias="抄送人帐号列表"/>
+      <field name="bcc" alias="密抄人帐号列表"/>
+      <field name="subject" alias="邮件主题"/>
+      <field name="mail_conent" alias="邮件内容"/>
+      <field name="attachment_names" alias="附件名列表"/>
+    </alert>
+    </alerttype>
+    <alerttype name="domain" alias="域名审计告警" ordinal="2" class="com.topsec.ti.zxg.domain.alert.audit.Domain" extendFiled = "alertcommonfield">
+      <alert>
+        <field name="dns" alias=""/>
+        <field name="domain_ip" alias="域名对应ip表"/>
+      </alert>
+    </alerttype>
+    <alerttype name="ip" alias="IP审计告警" ordinal="3" class="com.topsec.ti.zxg.domain.alert.audit.IP" extendFiled = "alertcommonfield">
+      <alert>
+      </alert>
+    </alerttype>
+    <alerttype name="url" alias="URL审计告警" ordinal="4" class="com.topsec.ti.zxg.domain.alert.audit.URL" extendFiled = "alertcommonfield">
+      <alert>
+        <field name="url" alias="请求URL"/>
+        <field name="method" alias="请求方法"/>
+        <field name="user_agent" alias="请求User Agent信息"/>
+        <field name="cookie" alias="请求Cookie信息"/>
+        <field name="ret_code" alias="返回状态码"/>
+        <field name="server" alias="服务器信息"/>
+      </alert>
+    </alerttype>
+</alerttype>
+<alerttype name="涉密信息告警" alias="涉密信息告警" ordinal="3">
+    <alerttype name="email" alias="电子邮件涉密信息告警" ordinal="1" class="com.topsec.ti.zxg.domain.alert.security.Email" extendFiled = "securitycommonfield">
+      <alert>
+        <field name="cc" alias="抄送"/>
+        <field name="bcc" alias="密送"/>
+        <field name="subject" alias="邮件主题"/>
+        <field name="domain" alias="邮件提供商名"/>
+        <field name="rcpt_to" alias="认证过程中RCPT TO命令提交的邮件接收者"/>
+        <field name="mail_from" alias="认证过程中MAIL FROM命令提交的邮件发送者"/>
+        <field name="ip" alias=""/>
+      </alert>
+    </alerttype>
+    <alerttype name="fileTranfer" alias="文件传输涉密信息告警" ordinal="2" class="com.topsec.ti.zxg.domain.alert.security.FileTranfer" extendFiled = "securitycommonfield">
+      <alert>
+        <field name="account" alias="FTP账号"/>
+        <field name="pwd" alias="FTP密码"/>
+        <field name="trans_dir" alias="文件传输方向; 发送:1接收:2未知:3"/>
+      </alert>
+    </alerttype>
+    <alerttype name="http" alias="HTTP发布涉密信息告警" ordinal="3" class="com.topsec.ti.zxg.domain.alert.security.Http" extendFiled = "securitycommonfield">
+      <alert>
+        <field name="domain" alias="访问域"/>
+        <field name="url" alias="访问url"/>
+        <field name="method" alias="HTTP请求方法"/>
+        <field name="ret_code" alias="HTTP返回码"/>
+        <field name="user_agent" alias="请求user-agent"/>
+        <field name="cookie" alias="请求的cookie信息"/>
+        <field name="server" alias="服务端的server信息"/>
+        <field name="refer" alias="引用页"/>
+      </alert>
+    </alerttype>
+    <alerttype name="im" alias="即时通信涉密信息告警" ordinal="4" class="com.topsec.ti.zxg.domain.alert.security.IM" extendFiled = "securitycommonfield">
+      <alert>
+        <field name="account" alias="Im账户"/>
+        <field name="msg_content" alias="聊天内容"/>
+      </alert>
+    </alerttype>
+    <alerttype name="netdisk" alias="网盘涉密信息告警" ordinal="5" class="com.topsec.ti.zxg.domain.alert.security.Netdisk" extendFiled = "securitycommonfield">
+      <alert>
+        <field name="account" alias="网盘账户"/>
+        <field name="domain" alias="网盘类型"/>
+      </alert>
+    </alerttype>
+    <alerttype name="otherSecurity" alias="其它涉密信息告警" ordinal="6" class="com.topsec.ti.zxg.domain.alert.security.OtherSecurity" extendFiled = "securitycommonfield">
+      <alert>
+      </alert>
+    </alerttype>
+</alerttype>
+</alerttype>

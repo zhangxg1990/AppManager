@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.topsec.ti.zxg.mapper.AlertMapper">
+    <resultMap type="Alert" id="alertMap">
+        <discriminator javaType="string" column="res_type">
+            <case value="TROJANATTACK" resultType="TrojanAttack"/>
+            <case value="EXPLOITATTACK" resultType="ExploitAttack"/>
+            <case value="MALWAREATTACK" resultType="MalwareAttack"/>
+            <case value="OTHERATTACK" resultType="OtherAttack"/>
+            <case value="ABNORMALATTACK" resultType="AbnormalAttack"/>
+            <case value="IP" resultType="IP"/>
+            <case value="DOMAIN" resultType="Domain"/>
+            <case value="URL" resultType="URL"/>
+            <case value="ACCOUT" resultType="Accout"/>
+            <case value="EMAIL" resultType="Email"/>
+            <case value="IM" resultType="IM"/>
+            <case value="FILETRANFER" resultType="FileTranfer"/>
+            <case value="HTTP" resultType="Http"/>
+            <case value="NETDISK" resultType="Netdisk"/>
+            <case value="OTHERSECURITY" resultType="OtherSecurity"/>
+        </discriminator>
+    </resultMap>
+    <select id="queryAlertWithoutTypePage" resultMap="alertMap">
+        <if test="alert.disposalBehavior==-1">
+            select t1.*,t2.alert_id as disposalStatus,EXPLOITATTACK as res_type  from exploit_attack_alert_log t1 left join (select DISTINCT (alert_id) from alert_disposal_info) t2
+            on t1.alert_id=t2.alert_id
+        </if>
+        <if test="alert.disposalBehavior==0">
+            select t1.*,'EXPLOITATTACK' as res_type from exploit_attack_alert_log t1
+        </if>
+        <if test="alert.disposalBehavior==1">
+            select t1.*,1 as disposalStatus,EXPLOITATTACK as res_type from exploit_attack_alert_log t1
+        </if>
+        <where>
+            <if test="alert.searchTime != null and alert.searchTime !=''">
+                AND t1.cap_date=#{alert.searchTime}
+            </if>
+            <if test="detectors !=null and detectors.length &gt;=1">
+                and
+                <foreach collection="detectors" item="detector" open=" t1.device_id in (" close=")" separator=",">
+                    #{detector.device_id}
+                </foreach>
+            </if>
+            <choose>
+                <when test="alert.risk ==-1">
+                </when>
+                <otherwise>
+                    and t1.risk = #{alert.risk}
+                </otherwise>
+            </choose>
+            <if test="alert.trojan_type != null and alert.trojan_type !=''">
+                AND t1.trojan_type = #{alert.trojan_type}
+            </if>
+            <if test="alert.disposalBehavior==1">
+                AND t1.alert_id in (select DISTINCT(alert_id) from alert_disposal_info)
+            </if>
+            <if test="alert.disposalBehavior==0">
+                AND not exists (select 1 from alert_disposal_info where t1.alert_id = alert_id)
+            </if>
+            <if test="alert.sip != null and alert.sip !=''">
+                AND t1.sip = #{alert.sip}
+            </if>
+            <if test="alert.dip != null and alert.dip !=''">
+                AND t1.dip = #{alert.dip}
+            </if>
+            <if test="alert.sport != null and alert.sport !=''">
+                AND t1.sport = #{alert.sport}
+            </if>
+            <if test="alert.dport != null and alert.dport !=''">
+                AND t1.dport = #{alert.dport}
+            </if>
+            <if test="alert.smac != null and alert.smac !=''">
+                AND t1.smac = #{alert.smac}
+            </if>
+            <if test="alert.dmac != null and alert.dmac !=''">
+                AND t1.dmac = #{alert.dmac}
+            </if>
+            <if test="alert.start_time != null and alert.start_time !=''">
+                AND t1.time &gt;= #{alert.start_time}
+            </if>
+            <if test="alert.end_time != null and alert.end_time !=''">
+                AND t1.time &lt;= #{alert.end_time}
+            </if>
+        </where>
+
+        ORDER BY t1.time desc
+    </select>
+    <select id="queryAlertPage" resultMap="alertMap">
+        <if test="alert.disposalBehavior==-1">
+            select t1.*,'${alertType}' as res_type from ${alertType.tableName}
+            t1 /*left join  (select DISTINCT (alert_id) from alert_disposal_info) t2
+            on t1.alert_id=t2.alert_id*/
+        </if>
+        <if test="alert.disposalBehavior==1">
+            select t1.*,1 as disposalStatus,'${alertType}' as res_type from ${alertType.tableName}
+            t1
+        </if>
+        <if test="alert.disposalBehavior==0">
+            select t1.*,'${alertType}' as res_type from ${alertType.tableName} t1
+        </if>
+        <where>
+            <if test="alert.searchTime != null and alert.searchTime !=''">
+                AND t1.cap_date=#{alert.searchTime}
+            </if>
+            <if test="detector !=null and detector.device_id !=null"> and t1.device_id = #{detector.device_id}
+            </if>
+            <choose>
+                <when test="alert.risk ==-1">
+                </when>
+                <otherwise>
+                    and t1.risk = #{alert.risk}
+                </otherwise>
+            </choose>
+            <if test="alert.disposalBehavior==1">
+                AND exists (select 1 from alert_disposal_info where t1.alert_id = alert_id)
+            </if>
+            <if test="alert.disposalBehavior==0">
+                AND not exists (select 1 from alert_disposal_info where t1.alert_id = alert_id)
+            </if>
+            <if test="alert.sip != null and alert.sip !=''">
+                AND t1.sip = #{alert.sip}
+            </if>
+            <if test="alert.dip != null and alert.dip !=''">
+                AND t1.dip = #{alert.dip}
+            </if>
+            <if test="alert.sport != null and alert.sport !=''">
+                AND t1.sport = #{alert.sport}
+            </if>
+            <if test="alert.dport != null and alert.dport !=''">
+                AND t1.dport = #{alert.dport}
+            </if>
+            <if test="alert.smac != null and alert.smac !=''">
+                AND t1.smac = #{alert.smac}
+            </if>
+            <if test="alert.dmac != null and alert.dmac !=''">
+                AND t1.dmac = #{alert.dmac}
+            </if>
+            <if test="alert.start_time != null and alert.start_time !=''">
+                AND t1.time &gt;= #{alert.start_time}
+            </if>
+            <if test="alert.end_time != null and alert.end_time !=''">
+                AND t1.time &lt;= #{alert.end_time}
+            </if>
+        </where>
+        ORDER BY t1.time desc
+    </select>
+
+    <!--<select id="queryAlertFiles" resultType="Integer">
+      select count(0) from policy_info p where p.device_id=#{value}
+
+    </select>-->
+    <select id="queryAlertFiles" resultType="AlertFile">
+      select t.* from alert_file t
+        <where>
+            <if test="alertId!=null">
+                t.id=#{alertId}
+            </if>
+        </where>
+    </select>
+    <select id="queryAlertByIdAndName" resultMap="alertMap">
+            select '${alertType}' as res_type from ${alertType.tableName} where alert_id = #{alertId}
+    </select>
+</mapper>

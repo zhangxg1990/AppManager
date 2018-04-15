@@ -1,0 +1,30 @@
+<!-- 用户管理页面 -->
+<div ng-controller="userMagCtrl" class="by_urse">
+    <div class="box">
+        <!-- title -->
+        <div class="by_urse_t">
+            <div class="by_box-inner" data-original-title="">
+                <span><i class="glyphicon glyphicon-user"></i> {{title}}</span>
+            </div>
+            <div class="by_urse_tab">
+
+                <!-- ng-show="isRoleManage"  ng-show="isUserAuthority" -->
+                <span class="btn btn-primary btn-sm by_but_bule" ng-click="menuBtnClick(1);">用户授权</span>
+                <span class="btn btn-primary btn-sm by_but_yellow" ng-click="menuBtnClick(2);">角色管理</span>
+
+                <!--<span class="btn btn-primary btn-sm by_but_red" ng-click="menuBtnClick(3);">值班状态</span>-->
+            </div>
+        </div>
+
+        <!-- 角色管理 -->
+        <div ng-show="isRoleManagePage" ng-include="'tpl/userMag/roleManage.html'"
+             style="top: 40px;left: 0px;right: 0px;bottom:0px;position: absolute;">角色管理</div>
+        <!-- 用户授权 -->
+        <div ng-show="isUserManagePage" ng-include="'tpl/userMag/userAuthority.html'"
+             style="top: 40px;left: 0px;right: 0px;bottom:0px;position: absolute;">用户授权</div>
+
+        <!-- 值班状态 -->
+        <!--<div ng-show="isOnDutyState" ng-include="'tpl/userMag/onDuty.html'"-->
+             <!--style="top: 40px;left: 0px;right: 0px;bottom:0px;position: absolute;">值班状态</div>-->
+    </div>
+</div>

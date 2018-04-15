@@ -1,0 +1,153 @@
+<!------网络审计 ------>
+<div ng-controller="auditCtrl_2" class="box-audit">
+    <div class="box-parent-left-tree box-inner by_inner"> <!-- by_tree -->
+        <div class="by_box-header">
+            <span><i class="glyphicon glyphicon-signal"></i>&nbsp;网络审计</span>
+        </div>
+        <div class="box-sub-left-tree box-content">  <!-- myTreeData -->
+            <treecontrol class="box-left-tree tree-boot" tree-model="treeData"
+                         expanded-nodes="expandNodes" on-selection="treeNodeClick(node);">
+                <!------管理中心,检测器图片 ----->
+                 <span ng-switch on="node.device_type" >
+                    <span ng-switch-when="1"  aria-hidden="true">
+                       <img src="assets/img/computer_live_32.png" width="25" height="25"/>
+                    </span>
+                    <span ng-switch-when="2"  aria-hidden="true">
+                        <img src="assets/img/architecture_25.png"/>
+                    </span>
+                </span>
+                {{node.name}}
+            </treecontrol>
+        </div>
+    </div>
+    <div class="box-right-list">
+        <!---------审计分类--------->
+        <div id="searchDiv" class="by_prompt_2">
+            <!--<span class="by_condition">审计类型</span>-->
+            <div class="by_condi_h_2">
+                <div ng-repeat="item in auditTypeList">
+                    <span style="font-size: 13px;"><span class="glyphicon glyphicon-star yellow"></span></span>
+                    <span style="font-size: 13px;">{{item.name}}:</span>
+                    <span style="font-size: 13px;margin-right: 5px;" ng-repeat="childItem in item.children">
+                        <a ng-class="childItem.css" ng-click="searchTypeClick(childItem)" href=""> <!-- class="sp_a"  -->
+                            {{childItem.name}}
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div style="min-height: 90px;background: #e9f1f3;border-radius: 5px;padding: 5px;">
+            <form>
+                <div>
+                    <span class="by_condition_2" style="margin-bottom: 5px;margin-right: 20px;float: left;">
+                        条件查询
+                    </span>
+                    <!-- ng-change="dateTypeChange();" -->
+                    <!--<select class="form-control input-sm" ng-model="dateType"-->
+                            <!--style="float: left;width: 130px;height:26px;vertical-align: middle;margin-right: 10px;margin-left: 8px;padding: 3px;"-->
+                            <!--ng-options="type.name for type in dateTypeArr">-->
+                    <!--</select>-->
+                    <!--&lt;!&ndash; 具体时间 &ndash;&gt;-->
+                    <!--<div ng-show="dateType.type == 'date'" id="dateSearch" class="btn btn-sm input-search-date">-->
+                        <!--&lt;!&ndash;<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&ndash;&gt;-->
+                        <!--<span></span> <b class="caret"></b>-->
+                    <!--</div>-->
+                    <span style="padding-left: 10px;float: left;">事件产生时间查询：</span>
+                    <!-- 时间段 ng-show="dateType.type == 'period'"-->
+                    <div  class="controls" style="float: left;width: 270px;margin-right: 10px;">
+                        <div class="input-prepend input-group" style="height: 28px;width: 270px;">
+                            <!--<span class="add-on input-group-addon" style="height: 28px;"><i class="glyphicon glyphicon-calendar fa fa-calendar" ></i></span>-->
+                            <input type="text" readonly style="width: 270px;height: 28px;background: #fff;cursor:pointer;"
+                                   name="reservation" id="periodSearch" class="form-control span4"/>
+                            <!-- value="2017/04/01 00:00:00 - 2017/05/01 00:00:00" -->
+                        </div>
+                    </div>
+
+                    <div style="float: left;">
+                        <span style="float: left;">传输层协议查询：</span>
+                        <select class="form-control input-sm" ng-model="protocolItem"
+                                style="float: left;width: 130px;height:26px;vertical-align: middle;margin-right: 10px;padding: 3px;"
+                                ng-options="it.name for it in protocolList">
+                        </select>
+                    </div>
+                </div>
+
+                <div style="clear: both;padding-top: 3px;">
+                        <span class="by_condition_2" style="margin-bottom: 5px;margin-right: 20px;float: left;">
+                            自定义查询
+                        </span>
+                    <div class="input-group-sm" style="float: left;margin-right: 10px;padding-left: 10px;">
+                        <span>源IP地址：</span>
+                        <input class="small" type="text" ng-model="sourceIP">
+                    </div>
+                    <div class="input-group-sm" style="float: left;margin-right: 10px;">
+                        <span>源端口：</span>
+                        <input class="small" type="text" ng-model="sourcePort">
+                    </div>
+                    <div class="input-group-sm" style="float: left;padding-left: 10px;margin-right: 10px;">
+                        <span>源MAC地址：</span>
+                        <input class="small" type="text" ng-model="sourceMac">
+                    </div>
+                </div>
+
+                <!-- 自定义查询 -->
+                <div  style="clear: both;margin-left: 130px;margin-top: 3px;padding-top: 2px;">
+                    <div class="input-group-sm" style="float: left;margin-right: 10px;">
+                        <span>目的IP地址：</span>
+                        <input class="small" type="text" ng-model="targetIP">
+                    </div>
+                    <div class="input-group-sm" style="float: left;margin-right: 10px;">
+                        <span>目的端口：</span>
+                        <input class="small" type="text" ng-model="targetPort">
+                    </div>
+                    <div class="input-group-sm" style="float: left;margin-right: 10px;">
+                        <span>目的MAC地址：</span>
+                        <input class="small" type="text" ng-model="targetMac">
+                    </div>
+                        <span class="btn btn-sm btn-default" style="float: left;padding: 3px 10px;margin-right: 10px;"
+                              ng-click="searchAuditClick();">
+                            查询
+                        </span>
+                        <span class="btn btn-sm btn-default" style="float: left;padding: 3px 10px;"
+                          ng-click="resetSearchClick();">重置</span>
+                </div>
+            </form>
+        </div>
+
+        <!-- 数据列表 -->
+        <div class="row box-table-audit">
+            <div ng-show="!isNoData" class="box-sub-table-audit">
+                <table class="table table-bordered temp_table-header table_header_top">
+                    <thead>
+                    <tr class="tr-audit" style="background:#E9F1F3;">
+                        <th ng-repeat="head in tableData.title" class="th-audit">{{head.name}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="tr-audit" ng-repeat="row in tableData.row" >
+                        <td ng-repeat="item in row.data" class="td-audit">{{item.value}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 当前无数据 -->
+            <div ng-show="isNoData" style="top: 100px;left: 0px;right: 0px;bottom: 0px;position: absolute;text-align: center;">
+                <span style="color: #ff0100;font-weight: bold;">当前无数据 ！</span>
+            </div>
+        </div>
+        <!-- 数据提示 ,滚动加载 -->
+        <!--<div ng-show="!isNoData" style="right:10px;bottom: 1px;position: absolute;text-align: right;">-->
+            <!--<span class="text-warning">当前显示：{{dataCount}} 条</span>-->
+            <!--<span ng-show="!isHasMore" class="text-warning">没有更多数据了</span>-->
+            <!--<span ng-show="isHasMore" class="text-warning">滚动列表加载更多数据</span>-->
+            <!--&lt;!&ndash;<span class="btn btn-sm btn-warning">返回列表顶部</span>&ndash;&gt;-->
+        <!--</div>-->
+        <div ng-show="isPaging" class="col-sm-12 box-paging-audit">
+            <ts-paging current-page="currentPage" list-total="listTotal" page-total="pageTotal" page-size="pageSize" group-size="groupSize" page-change="pageChangeFn(value)"></ts-paging>
+        </div>
+    </div>
+
+    <!--&lt;!&ndash; 遮罩层+ 加载进度条 &ndash;&gt;-->
+    <!--&lt;!&ndash;<div class="la-main-mask" ng-show="isLoading"></div>&ndash;&gt;-->
+    <!--<loading loading-flag="isLoading"></loading>-->
+</div>

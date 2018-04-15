@@ -1,0 +1,61 @@
+<!-- 告警处置 -->
+<!--<div class="modal-content">-->
+<div>
+    <div class="modal-header modal-blue">
+        <span class="modal-blue-title">告警处置</span>
+    </div>
+    <div class="modal-body">
+        <form>
+            <!--<div class="row form-group form-group-sm" style="margin-top: 0px;margin-bottom: 5px;padding: 1px;">-->
+                <!--<div class="col-sm-4" style="text-align: right;">-->
+                    <!--<label>告警id:</label>-->
+                <!--</div>-->
+                <!--<div class="col-sm-8">-->
+                    <!--<input type="text" class="form-control input-sm" style="width: 260px;"-->
+                          <!--ng-model="item.alertId" disabled required>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="row form-group form-group-sm" style="margin-top: 0px;margin-bottom: 5px;padding: 1px;">
+                <div class="col-sm-4" style="text-align: right;">
+                    <label>告警判定:</label>
+                </div>
+                <div class="col-sm-8">
+                    <!--<input type="text" class="form-control input-sm" style="width: 260px;"-->
+                        <!--ng-model="item.alertJudge" required>-->
+                    <select class="form-control input-sm" style="width: 200px;"
+                        ng-model="vm.alertType" ng-options="item.name for item in typeList"></select>
+                </div>
+            </div>
+            <div class="row form-group form-group-sm" style="margin-top: 0px;margin-bottom: 5px;padding: 1px;">
+                <div class="col-sm-4" style="text-align: right;">
+                    <label>处置意见:</label>
+                </div>
+                <div class="col-sm-8">
+                    <textarea class="form-control input-sm" rows="5" style="width: 260px;"
+                        ng-model="item.alertOpinion" required></textarea>
+                </div>
+            </div>
+            <!--数据处理优先级,只有资源文件告警处置包含这个条件 -->
+            <div ng-show="isSourceFile" class="row  form-group form-group-sm"
+                 style="margin-top: 0px;margin-bottom: 15px;padding: 1px;">
+                <div class="col-sm-4" style="text-align: right;">
+                    <label>数据处理优先级:</label>
+                </div>
+                <div class="col-sm-8">
+                    <select class="form-control input-sm" style="width: 260px;"
+                            ng-model="vm.filePriority"
+                            ng-options="item.name for item in filePriorityList">
+                        <!--<option>高</option>-->
+                        <!--<option>中</option>-->
+                        <!--<option>低</option>-->
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer model-foot-css">
+                <button type="submit" class="btn btn-sm btn-success" ng-click="okClick();">确定</button>
+                <span class="btn btn-sm btn-warning" ng-click="cancelClick();">取消</span>
+            </div>
+        </form>
+    </div>
+
+</div>

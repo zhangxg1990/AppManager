@@ -1,0 +1,15 @@
+<!-- 公共的告警提示框 -->
+<div class="modal-content">
+    <div class="modal-header model-blue">
+        <span class="model-title">{{title}}</span>
+    </div>
+    <div  class="modal-body">
+        <div class="bs-example">
+            {{message}}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-primary" type="button" ng-click="okClick();">确认</button>
+        <button ng-show="isCancelBtn" class="btn btn-sm btn-warning" type="button" ng-click="cancelClick();">取消</button>
+    </div>
+</div>

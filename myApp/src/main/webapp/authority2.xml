@@ -1,0 +1,53 @@
+
+<authorities>
+<authority id="1" name="超级权限" url="/"></authority>
+<authority id="100" name="角色管理" url="/role">
+    <authority id="101" name="创建角色" url="" method="POST"></authority>
+    <authority id="102" name="更新角色" url="/{id}" method="PUT"></authority>
+    <authority id="103" name="查询所有角色" url="/roles" method="GET"></authority>
+    <authority id="104" name="删除角色" url="/{id}" method="DELETE"></authority>
+    <!--<authority id="105" name="返回所有权限" url="/authorities" method="GET"></authority>-->
+</authority>
+<authority id="200" name="用户管理" url="/user">
+    <authority id="201" name="创建用户" url="" method="POST"></authority>
+    <authority id="202" name="更新用户" url="/{id}" method="PUT"></authority>
+    <authority id="203" name="查询所有用户" url="/users" method="GET"></authority>
+    <authority id="204" name="删除用户" url="/{id}" method="DELETE"></authority>
+</authority>
+
+<!--<authority id="500" name="设备管理" url="/device">
+  <authority id="501" name="设备拓扑管理" url="getDevicesByTp" method="GET"></authority>
+  <authority id="502" name="设备清单列表" url="/getDevices/{page}/{pageSize}" method="GET"></authority>
+  <authority id="503" name="设备详情" url="/getDeviceById/{device_id}" method="GET"></authority>
+  <authority id="504" name="检测器管理中心总量" url="/jcqActiveTotal" method="GET"></authority>
+  <authority id="505" name="检测器管理中心活跃总量" url="/glzxGroupTotal" method="GET"></authority>
+  <authority id="506" name="管理中心分组统计" url="/glzxGroupTotal" method="GET"></authority>
+  <authority id="507" name="管理中心下级树结构" url="/glzxGroupTotal" method="GET"></authority>
+  <authority id="508" name="检测器策略和告警数量" url="/glzxGroupTotal" method="GET"></authority>
+  <authority id="509" name="存储或者更新设备坐标" url="/saveDtc" method="POST"></authority>
+  <authority id="510" name="获取设备坐标xml" url="/getDtc" method="GET"></authority>
+</authority>-->
+<!--<authority id="600" name="策略管理" url="/policy">
+  <authority id="601" name="列举策略类型" url="/types" method="GET"></authority>
+</authority>-->
+
+    <authority id="1000" name="检测器" url="/ detector">
+    </authority>
+<authority id="700" name="网络审计" url="/netprotocol">
+    <authority id="701" name="网络审计类型" url="/list" method="GET"></authority>
+</authority>
+<!--<authority id="800" name="扩展应用系统管理" url="/app">
+  <authority id="801" name="创建系统" url="" method="POST"></authority>
+  <authority id="802" name="更新系统" url="/{id}" method="PUT"></authority>
+  <authority id="803" name="查询系统" url="/apps" method="GET"></authority>
+  <authority id="804" name="删除系统" url="/{id}" method="DELETE"></authority>
+</authority>-->
+<authority id="900" name="告警" url="/alert">
+    <authority id="901" name="查看所有告警信息" url="/listCenterAlert" method="POST"></authority>
+    <authority id="902" name="查看检测器告警列表" url="/listDetectorAlert" method="GET"></authority>
+    <authority id="903" name="查看各级告警处置" url="/disposalInfo/{alert_id}" method="GET"></authority>
+    <authority id="904" name="新增告警处置信息" url="/addAlertDisposalInfo" method="POST"></authority>
+    <authority id="905" name="获取所有告警类型" url="/types" method="GET"></authority>
+    <authority id="906" name="根据告警id下载告警文件" url="/downFile/{alert_id}" method="GET"></authority>
+</authority>
+</authorities>

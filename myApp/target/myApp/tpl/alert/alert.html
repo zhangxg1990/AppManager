@@ -1,0 +1,263 @@
+<!------告警处置 ------>
+<div ng-controller="alertCtrl" class="box-alert">
+    <!-- 左侧树 -->
+    <div class="box-parent-left-tree box-inner by_inner">
+        <div class="by_box-header" data-original-title="">
+            <span><i class="glyphicon glyphicon-warning-sign"></i>
+                告警处置
+            </span>
+        </div>
+        <div class="box-sub-left-tree box-content">     <!-- myTreeData -->
+            <treecontrol class="box-left-tree tree-boot" tree-model="treeData"
+                    expanded-nodes="expandNodes"
+                    on-selection="treeNodeClick(node);">
+
+                <!------管理中心,检测器图片 ----->
+                 <span ng-switch on="node.device_type" >
+                    <span ng-switch-when="1"  aria-hidden="true">
+                       <img src="assets/img/computer_live_32.png" width="25" height="25"/>
+                    </span>
+                    <span ng-switch-when="2"  aria-hidden="true">
+                        <img src="assets/img/architecture_25.png"/>
+                    </span>
+                </span>
+                {{node.name}}
+            </treecontrol>
+        </div>
+    </div>
+    <!-- 右侧 列表 -->
+    <div class="box-right-list">
+        <!-- 告警信息列表 -->
+        <div ng-show="!isDealHistory" class="row box-list-alert">
+            <!-- 告警分类 -->
+            <div class="box-search-alert">
+                <form>
+                    <div class="form-group-sm" style="margin: 5px;">
+                        <div class="by_condi_h_2">
+                            <div ng-repeat="item in alertTypeList" style="margin-right: 10px;">
+                                <span style="font-size: 13px;"><i class="glyphicon glyphicon-star yellow"></i></span>
+                                <span style="font-size: 13px;">
+                                    {{item.alias}}:
+                                </span>
+                                <span style="font-size: 13px;margin-right: 5px;" ng-repeat="childItem in item.dtoAlertTypes">
+                                    <a ng-class="childItem.css" href=""><!--class="sp_a" -->
+                                        <span ng-click="searchAlertByType(childItem)">{{childItem.alias}}</span>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- form-group-alert height: 30px;height: 90px;vertical-align: middle;-->
+            <div class="box-search-alert form-group"
+                 style="margin-top: 5px;height: 90px;margin-bottom:5px;">
+
+                <form>
+                <div>
+                    <span class="by_condition_2" style="margin-bottom: 5px;margin-right: 20px;float: left;">条件查询</span>
+
+                    <span style="padding-left: 10px;float: left;">告警级别：</span>
+                    <select class="form-control input-sm"
+                            style="float: left;width: 120px;height: 26px;vertical-align:middle;margin-right: 10px;padding-top: 3px;"
+                            ng-model="vm.alertLevel"
+                            ng-options="item.name for item in alertLevel.children"
+                            >
+                    </select>
+
+                    <!--ng-change="dateTypeChange();"-->
+                    <!--<select class="form-control input-sm" ng-model="dateType"-->
+                            <!--style="float: left;width: 130px;height:26px;vertical-align: middle;margin-right: 10px;padding: 3px;"-->
+                            <!--ng-options="type.name for type in dateTypeArr">-->
+                        <!--&lt;!&ndash;{{type.name}}&ndash;&gt;-->
+                        <!--&lt;!&ndash;<option>具体日期告警查询</option>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<option>时间段告警查询</option>&ndash;&gt;-->
+                    <!--</select>-->
+                    <!-- 具体时间 -->
+                    <!--<div ng-show="dateType.type == 'date'" id="dateSearch" class="btn btn-sm input-search-date">-->
+                        <!--&lt;!&ndash;<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&ndash;&gt;-->
+                        <!--<span></span> <b class="caret"></b>-->
+                    <!--</div>-->
+                    <span style="padding-left: 10px;float: left;">告警产生时间查询：</span>
+                    <!-- 时间段 -->
+                    <div  class="controls">  <!-- ng-show="dateType.type == 'period'" -->
+                        <div class="input-prepend input-group" style="height: 28px;">
+                            <!--<span class="add-on input-group-addon" style="height: 28px;"><i class="glyphicon glyphicon-calendar fa fa-calendar" ></i></span>-->
+                            <input type="text" readonly style="width: 270px;height: 28px;background: #fff;cursor:pointer;"
+                                   name="reservation" id="periodSearch" class="form-control span4"
+                                   value="2017/04/01 00:00:00 - 2017/05/01 00:00:00"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="clear: both;padding-top: 3px;">
+                    <span class="by_condition_2" style="margin-bottom: 5px;margin-right: 20px;float: left;">
+                        自定义查询
+                    </span>
+                    <div class="input-group-sm" style="float: left;margin-right: 10px;padding-left: 10px;">
+                        <span>源IP地址：</span>
+                        <input class="small" type="text" ng-model="sourceIP">
+                    </div>
+                    <div class="input-group-sm" style="float: left;margin-right: 10px;">
+                        <span>源端口：</span>
+                        <input class="small" type="text" ng-model="sourcePort">
+                    </div>
+                    <div class="input-group-sm" style="float: left;padding-left: 10px;margin-right: 10px;">
+                        <span>源MAC地址：</span>
+                        <input class="small" type="text" ng-model="sourceMac">
+                    </div>
+                </div>
+
+                <!-- 自定义查询 -->
+                <!-- class="form-group-sm" style="clear: both;
+                padding-top: 5px;padding-bottom: 5px;margin-bottom: 5px;" -->
+                <div  style="clear: both;margin-left: 130px;margin-top: 3px;padding-top: 2px;">
+                    <div class="input-group-sm" style="float: left;margin-right: 10px;">
+                        <span>目的IP地址：</span>
+                        <input class="small" type="text" ng-model="targetIP">
+                    </div>
+                    <div class="input-group-sm" style="float: left;margin-right: 10px;">
+                        <span>目的端口：</span>
+                        <input class="small" type="text" ng-model="targetPort">
+                    </div>
+                    <div class="input-group-sm" style="float: left;margin-right: 10px;">
+                        <span>目的MAC地址：</span>
+                        <input class="small" type="text" ng-model="targetMac">
+                    </div>
+
+                    <span class="btn btn-sm btn-default" style="float: left;padding: 3px 10px;margin-right: 10px;"
+                        ng-click="searchAlertClick();">查询</span>
+                    <span class="btn btn-sm btn-default" style="float: left;padding: 3px 10px;"
+                          ng-click="resetSearchClick();">重置</span>
+                </div>
+                </form>
+            </div>
+            <!-- 告警列表 -->
+            <!--<div class="row box-deal-status-alert" style="padding-bottom: 0px;">-->
+                <!--<div class="col-sm-9" style="margin: 0px;padding-left: 20px;">-->
+                    <!--<label>{{alertDealTitle}}</label>-->
+                <!--</div>-->
+                <!--<div ng-show="!isNoData" class="col-sm-6" style="margin: 0px;text-align: right;padding-right: 10px;">-->
+                    <!--<button type="button" class="btn btn-sm btn-primary by_but_bule">全部</button>-->
+                    <!--<button type="button" class="btn btn-sm btn-success by_but_yellow">已处置</button>-->
+                    <!--<button type="button" class="btn btn-sm btn-warning by_but_red">未处置</button>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="box-tab-alert ">
+                <div class="col-sm-8">
+                   <label>{{alertDealTitle}}</label>
+                </div>
+                <div class="col-sm-4">
+                    <ul class="alert_ul">
+                        <li ng-repeat="item in dealStatusList" ng-click="handleAll(item)">
+                            <span class="btn-sm" ng-class="item.css">{{item.name}}</span> /&nbsp;
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div ng-show="!isNoData" class="box-table-alert"> <!--  class="by_xianzhi" -->
+                <table class="table table-bordered table_header_top" style="padding-left: 10px;padding-right:10px;">  <!-- table-bordered table-header-->
+                    <thead>
+                    <tr style="background: #E9F1F3"> <!-- e1e6eb -->
+                        <th class="th-alert">操作</th>
+                        <th ng-repeat="head in tableHeadList" class="th-alert">
+                            {{head.cnName}}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--<tr class="{{data.css}}" ng-repeat="data in tableDataList">-->
+                    <tr ng-repeat="data in tableDataList">
+                        <td ng-show="!isResourceFile" class="td-alert">
+                            <!--<span class="btn btn-sm btn-warning by_but_bule"-->
+                                  <!--style="margin: 0px;padding: 3px;"-->
+                                  <!--ng-click="dealAlertClick(data);">-->
+                                <!--处置-->
+                            <!--</span>-->
+                            <!--<span class="btn btn-sm btn-warning by_but_more"-->
+                                  <!--style="margin: 0px;padding: 3px;"-->
+                                <!--ng-click="downloadAlertFile(data);">-->
+                                <!--文件下载-->
+                            <!--</span>-->
+
+                            <!--<span class="btn btn-sm btn-warning by_but_yellow"-->
+                                  <!--style="margin: 0px;padding: 3px;"-->
+                                  <!--ng-click="dealHistoryClick(data);">-->
+                                <!--审批记录-->
+                            <!--</span>-->
+                            <img src="assets/icon/alert_order.png" style="cursor: pointer;width:25px;height:25px;" title="审批记录" alt="审批记录" ng-click="dealHistoryClick(data);">
+                            <img src="assets/icon/alert_deal.png" style="cursor: pointer;width:25px;height:25px;" title="处置告警" alt="处置告警" ng-click="dealAlertClick(data);">
+                            <img src="assets/icon/alert_down.png" style="cursor: pointer;width:25px;height:25px;" title="文件下载" alt="文件下载" ng-click="downloadAlertFile(data);">
+                        </td>
+                        <td ng-show="isResourceFile" class="td-alert">
+                            <span class="btn btn-sm btn-warning" style="margin: 0px;padding: 3px;">设置优先级</span>
+                            <span class="btn btn-sm btn-warning" style="margin: 0px;padding: 3px;">深度解析</span>
+                        </td>
+                        <td ng-repeat="item in data.children" class="td-alert">
+                            {{item.value}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-show="isNoData" style="text-align: center;"><!--  class="box-table-alert" -->
+                <label style="color: #ff0100;">当前无数据！</label>
+            </div>
+        </div>
+        <div ng-show="isPaging&&!isDealHistory" class="col-sm-12 box-paging-alert">
+            <div>
+                <ts-paging current-page="currentPage" list-total="listTotal" page-total="pageTotal" page-size="pageSize" group-size="groupSize" page-change="pageChangeFn(value)"></ts-paging>
+            </div>
+        </div>
+
+        <!-- 处置记录列表 ，历史处置信息列表-->
+        <div ng-show="isDealHistory" class="row box-list-alert">
+            <div class="by_box-inner" data-original-title="">
+                <div class="col-sm-6">
+                <span>
+                    <i class="glyphicon glyphicon-warning-sign"></i>&nbsp;{{title}}
+                </span>
+                </div>
+                <!-- 处置记录 返回按钮； 返回告警信息列表 -->
+                <div class="col-sm-6" style="text-align: right;padding-right: 20px;">
+                    <span ng-show="isDealHistory" class="btn btn-sm btn-success" ng-click="backToAlertListClick();">返回</span>
+                </div>
+            </div>
+            <div>
+                <table class="table table-bordered temp_table-header table_header_top">
+                    <thead>
+                    <tr>
+                        <th class="th-deal-history-alert">告警ID</th>
+                        <th class="th-deal-history-alert">告警判定</th>
+                        <th class="th-deal-history-alert">处置意见</th>
+                        <th class="th-deal-history-alert">处置人员</th>
+                        <th class="th-deal-history-alert">处置时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="it in dealHistoryList">
+                        <td class="td-deal-history-alert">{{it.alertId}}</td>
+                        <td class="td-deal-history-alert">{{it.alertDecision}}</td>
+                        <td class="td-deal-history-alert">{{it.disposalOpinion}}</td>
+                        <td class="td-deal-history-alert">{{it.disposalPerson}}</td>
+                        <td class="td-deal-history-alert">{{it.disposalTime}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-show="isNoDataHis"  class="box-table-alert" style="text-align: center;"> <!--  class="box-table-alert" -->
+                <label style="top:30px;color: #ff0100;">当前无数据！</label>
+            </div>
+        </div>
+        <!--审批记录的paging -->
+        <div ng-show="isPagingHis&&isDealHistory" class="col-sm-12 box-paging-alert">
+            <div>
+                <ts-paging current-page="currentPageHis" page-total="pageTotalHis" page-size="pageSizeHis" group-size="groupSizeHis" page-change="pageChangeFnHis(value)"></ts-paging>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载进度条loading -->
+    <!--<loading loading-flag="isLoading"></loading>-->
+</div>

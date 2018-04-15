@@ -1,0 +1,77 @@
+<div ng-controller="policyCtrl_2" class="box-policy">
+    <!-- 左侧树 -->
+    <div class="box-parent-left-tree box-inner by_inner"> <!-- by_tree -->
+        <div class="by_box-header">
+           <span><i class="glyphicon glyphicon-eye-open"></i> 策略展示</span>
+        </div>
+        <div class="box-sub-left-tree box-content">
+            <treecontrol class="box-left-tree tree-boot"
+                         tree-model="treeData"
+                         on-selection="treeNodeClick(node);"
+                         expanded-nodes="expandNodes"
+                         selected-node="node1">
+                <!------管理中心,检测器图片 ----->
+                <span ng-switch on="node.device_type" >
+                    <span ng-switch-when="1"  aria-hidden="true">
+                        <img src="assets/img/computer_live_32.png" style="width: 25px;height: 25px;"/>
+                    </span>
+                    <span ng-switch-when="2"  aria-hidden="true">
+                        <img src="assets/img/architecture_25.png"/>
+                    </span>
+                </span>
+                <!--<span class="" id="bg"  title={{node.name}} >{{node.name}}</span>-->
+                {{node.name}}
+            </treecontrol>
+        </div>
+    </div>
+    <!-- 右侧 容器 -->
+    <div class="box-right-list">
+        <!--<div class="by_box-inner" data-original-title="">-->
+            <!--<span><i class="glyphicon glyphicon-eye-open"></i>&nbsp;策略展示</span>-->
+        <!--</div>-->
+        <!---------策略类型，策略分类--------->
+        <div id="searchDiv" class="by_prompt_2">
+            <div class="by_condi_h_2">
+                <div ng-repeat="item in typeList">
+                    <span style="font-size: 13px;" class="glyphicon glyphicon-star yellow"></span>
+                    <span style="font-size: 13px;">{{item.alias}}:</span>
+                    <span style="font-size: 13px;margin-right: 5px;" ng-repeat="childItem in item.dtoPolicyTypes" >
+                        <a ng-class="childItem.css"  ng-click="searchItemClick(childItem)" href="">  <!-- class="sp_a" -->
+                            {{childItem.alias}}
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- 数据列表 -->
+        <div class="row box-table-policy">
+            <div  ng-show="!isNoData" class="box-sub-table-policy">
+                <table class="table table-bordered temp_table-header table_header_top">
+                    <thead>
+                    <tr style="background: #E9F1F3">
+                        <th class="th-policy" ng-repeat=" head in tableHeadList">{{head.alias}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="row in tableDataList">
+                        <td class="td-policy" ng-repeat="col in row.list">{{col.value}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 当前无数据 提示 -->
+            <div ng-show="isNoData" class="box-table-policy" style="text-align: center;">
+                <label style="top:30px;color: #ff0100;">当前无数据 !</label>
+            </div>
+        </div>
+        <!-- paging 分页 -->
+        <div ng-show="isPaging" class="box-paging-policy"> <!-- by_paging -->
+            <div>
+                <ts-paging current-page="currentPage" list-total="listTotal" page-total="pageTotal" page-size="pageSize" group-size="groupSize" page-change="pageChangeFn(value)"></ts-paging>
+            </div>
+        </div>
+    </div>
+
+    <!--&lt;!&ndash; 加载进度条loading &ndash;&gt;-->
+    <!--<loading loading-flag="isLoading"></loading>-->
+</div>

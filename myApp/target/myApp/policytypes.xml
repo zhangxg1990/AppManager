@@ -1,0 +1,239 @@
+<policytype>
+
+  <policycommonfield>
+    <field name="device_id" alias="检测器ID"/>
+    <field name="level_class" alias="设备层级"/>
+    <field name="policy_id" alias="策略ID"/>
+    <field name="policy_type" alias="策略类型"/>
+    <field name="policy_version" alias="策略版本号"/>
+  </policycommonfield>
+
+  <policytype name="攻击窃密检测策略" alias="攻击窃密检测策略" ordinal="0">
+    <policytype name="trojan" alias="木马攻击窃密检测策略" ordinal="1" class="com.topsec.ti.zxg.domain.policy.steal.Trojan">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+        <field name="trojan_id" alias="木马分类编号"/>
+        <field name="store_pcap" alias="报文是否留存"/>
+        <field name="os" alias="攻击适用的操作系统"/>
+        <field name="trojan_name" alias="木马名称"/>
+        <field name="trojan_type" alias="木马类型"/>
+        <field name="descr" alias="规则描述"/>
+        <field name="rule" alias="规则内容"/>
+      </policy>
+    </policytype>
+
+    <policytype name="attack" alias="漏洞利用窃密检测策略" ordinal="2" class="com.topsec.ti.zxg.domain.policy.steal.Exploits">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+        <field name="store_pcap" alias="报文是否留存"/>
+        <field name="rule" alias="规则内容"/>
+        <field name="attack_type" alias="攻击类型"/>
+        <field name="application" alias="攻击适用的应用程序"/>
+        <field name="os" alias="攻击适用的操作系统"/>
+      </policy>
+    </policytype>
+
+    <policytype name="malware" alias="恶意程序窃密检测策略" ordinal="3" class="com.topsec.ti.zxg.domain.policy.steal.Malware">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="md5" alias="恶意程序文件的md5"/>
+        <field name="signature" alias="恶意程序包含的十六进制字符串"/>
+        <field name="sip" alias="源地址"/>
+        <field name="content" alias="正文或标题"/>
+        <field name="filename" alias="文件名"/>
+        <field name="malware_type" alias="恶意程序种类"/>
+        <field name="malware_name" alias="恶意程序名称"/>
+        <field name="risk" alias="告警级别"/>
+      </policy>
+    </policytype>
+
+    <policytype name="other" alias="其他攻击窃密检测策略" ordinal="4" class="com.topsec.ti.zxg.domain.policy.steal.Other">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+      </policy>
+
+    </policytype>
+    <policytype name="abnormal" alias="未知攻击窃密检测策略" ordinal="5"
+                class="com.topsec.ti.zxg.domain.policy.steal.Abnormal">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+      </policy>
+    </policytype>
+  </policytype>
+
+
+  <policytype name="传输泄密信息策略" alias="传输泄密信息策略" ordinal="1">
+    <policytype name="finger_file" alias="密标文件检测策略" ordinal="1"
+                class="com.topsec.ti.zxg.domain.policy.transfer.FingerFile">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+      </policy>
+    </policytype>
+    <policytype name="sensitive_file" alias="标密文件检测策略" ordinal="2"
+                class="com.topsec.ti.zxg.domain.policy.transfer.SensitiveFile">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+      </policy>
+    </policytype>
+    <policytype name="keyword_file" alias="关键字检测策略" ordinal="3"
+                class="com.topsec.ti.zxg.domain.policy.transfer.KeywordFile">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+        <field name="rule_type" alias="规则类型"/>
+        <field name="min_match_count" alias="最少命中次数"/>
+        <field name="rule_context" alias="规则内容"/>
+      </policy>
+
+    </policytype>
+    <policytype name="encryption_file" alias="加密文件检测策略" ordinal="5"
+                class="com.topsec.ti.zxg.domain.policy.transfer.EncryptionFile">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+        <field name="id" alias="类型ID"/>
+        <field name="filesize" alias="文件大小">
+          <field name="minsize" alias="最小值(KB)"/>
+          <field name="maxsize" alias="最大值(KB)"/>
+        </field>
+      </policy>
+
+    </policytype>
+    <policytype name="compress_file" alias="压缩文件检测策略" ordinal="6"
+                class="com.topsec.ti.zxg.domain.policy.transfer.CompressFile">
+      <policy>
+        <field name="id" alias="类型ID"/>
+        <field name="depth" alias="压缩深度"/>
+        <field name="filesize" alias="文件大小">
+          <field name="backsize" alias="需要回传压缩文件大小(MB)"/>
+          <field name="dropsize" alias="需要丢弃压缩文件大小(MB)"/>
+        </field>
+      </policy>
+    </policytype>
+    <policytype name="picture_filter" alias="图片文件筛选策略" ordinal="7"
+                class="com.topsec.ti.zxg.domain.policy.transfer.PictureFile">
+      <policy>
+        <field name="id" alias="类型ID"/>
+        <field name="filesize" alias="图片大小">
+          <field name="minsize" alias="最小值(KB)"/>
+          <field name="maxsize" alias="最大值(KB)"/>
+        </field>
+        <field name="resolution" alias="图片分辨率">
+          <field name="x" alias="x">
+            <field name="minsize" alias="最小值(KB)"/>
+            <field name="maxsize" alias="最大值(KB)"/>
+          </field>
+          <field name="y" alias="y">
+            <field name="minsize" alias="最小值(KB)"/>
+            <field name="maxsize" alias="最大值(KB)"/>
+          </field>
+        </field>
+      </policy>
+    </policytype>
+    <policytype name="style_file" alias="版式文件检测策略" ordinal="8"
+                class="com.topsec.ti.zxg.domain.policy.transfer.StyleFile">
+      <policy>
+      </policy>
+    </policytype>
+  </policytype>
+
+
+
+  <policytype name="目标审计策略" alias="目标审计策略" ordinal="2">
+    <policytype name="ip_listen" alias="IP审计检测策略" ordinal="1"
+                class="com.topsec.ti.zxg.domain.policy.audit.object.IPAuditPolicy">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+        <field name="sip" alias="源IP地址"/>
+        <field name="sport" alias="源端口范围"/>
+        <field name="dip" alias="目的IP地址"/>
+        <field name="dport" alias="目的端口范围"/>
+        <field name="protocol" alias="通信协议"/>
+      </policy>
+    </policytype>
+    <policytype name="domain_listen" alias="域名审计检测策略" ordinal="2"
+                class="com.topsec.ti.zxg.domain.policy.audit.object.DomainAuditPolicy">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+        <field name="dns" alias="域名信息"/>
+        <field name="rule_type" alias="规则类型"/>
+        <field name="match_type" alias="匹配类型"/>
+      </policy>
+    </policytype>
+    <policytype name="url_listen" alias="URL审计检测策略" ordinal="3"
+                class="com.topsec.ti.zxg.domain.policy.audit.object.URLAudit">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+        <field name="dns" alias="域名信息"/>
+        <field name="rule_type" alias="规则类型"/>
+        <field name="match_type" alias="匹配类型"/>
+      </policy>
+    </policytype>
+    <policytype name="account_listen" alias="帐号审计检测策略" ordinal="4"
+                class="com.topsec.ti.zxg.domain.policy.audit.object.AccountAuditPolicy">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="risk" alias="告警级别"/>
+        <field name="account_type" alias="账号应用类型"/>
+        <field name="account" alias="账号信息"/>
+        <field name="rule_type" alias="规则类型"/>
+        <field name="match_type" alias="匹配类型"/>
+      </policy>
+    </policytype>
+  </policytype>
+
+
+
+  <policytype name="网络审计策略" alias="网络审计策略" ordinal="3">
+    <policytype name="net_log" alias="通联关系上报策略" ordinal="1"
+                class="com.topsec.ti.zxg.domain.policy.audit.net.ConnAuditPolicy">
+      <policy>
+        <field name="interval" alias="上传的时间间隔(分钟)"/>
+        <field name="num" alias="日志条数"/>
+      </policy>
+    </policytype>
+    <policytype name="app_behavior" alias="应用行为上报策略" ordinal="2"
+                class="com.topsec.ti.zxg.domain.policy.audit.net.AppAuditUploadPolicy">
+      <policy>
+        <field name="interval" alias="上传的时间间隔(分钟)"/>
+        <field name="num" alias="缓存事件数"/>
+      </policy>
+    </policytype>
+    <policytype name="web_filter" alias="应用行为WEB过滤策略" ordinal="3"
+                class="com.topsec.ti.zxg.domain.policy.audit.net.WebWhiteListPolicy">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="url" alias="URL信息"/>
+        <field name="rule_type" alias="规则类型"/>
+        <field name="match_type" alias="匹配类型"/>
+      </policy>
+    </policytype>
+    <policytype name="dns_filter" alias="应用行为DNS过滤策略" ordinal="4"
+                class="com.topsec.ti.zxg.domain.policy.audit.net.DnsWhiteListPolicy">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="dns" alias="域名信息"/>
+        <field name="rule_type" alias="规则类型"/>
+        <field name="match_type" alias="匹配类型"/>
+      </policy>
+    </policytype>
+    <policytype name="ip_whitelist" alias="IP白名单过滤策略" ordinal="5"
+                class="com.topsec.ti.zxg.domain.policy.audit.net.IpWhiteListPolicy">
+      <policy>
+        <field name="rule_id" alias="规则ID"/>
+        <field name="ip" alias="IP地址"/>
+        <field name="port" alias="端口"/>
+      </policy>
+    </policytype>
+  </policytype>
+
+</policytype>

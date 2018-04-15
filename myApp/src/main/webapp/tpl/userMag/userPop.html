@@ -1,0 +1,78 @@
+<div class="modal-content">
+    <!-- 用户管理弹框 -->
+    <div class="modal-header model-blue">
+        <span class="model-title">{{title}}</span>
+    </div>
+    <!-- 新增用户、编辑用户 -->
+    <div class="modal-body">
+        <form role="form" id="user">  <!-- onsubmit="okClick();"-->
+            <div class="row form-group-sm model-form-group-css">
+                <div class="col-sm-4 model-form-label-css">
+                    <label>用户名称：</label>
+                </div>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" autocomplete="new-name" style="width: 250px;"
+                           ng-model="userVo.name" placeholder="用户名不能为空"
+                           required> <!--  ng-pattern="/a-zA-Z/"  用户名为6到12个英文字母，且不能为空  pattern="^[a-zA-Z]{6,12}$" -->
+                    <!--<input name="o_tel" type="text"-->
+                           <!--onkeyup="this.value=this.value.replace(/[^a-zA-Z]/g,'')"-->
+                           <!--onafterpaste="this.value=this.value.replace(/[^a-zA-Z]/g,'')"-->
+                           <!--id="o_tel"-->
+                           <!--size="15"-->
+                           <!--maxlength="13"/>-->
+                </div>
+                <div class="col-sm-2">
+                    <span style="color:#ff0000;font-size: 28px;height: 100%;vertical-align: middle;">*</span>
+                </div>
+            </div>
+            <div class="row form-group-sm model-form-group-css">
+                <div class="col-sm-4 model-form-label-css">
+                    <label>用户角色：</label>
+                </div>
+                <div class="col-sm-6">
+                    <select class="form-control" ng-model="vm.role"
+                            style="width: 250px;"
+                            ng-options="role.name for role in rolesList" required>
+                        <!--<option ng-repeat="role in rolesList">{{role.name}}</option>-->
+                    </select>
+                </div>
+                <div class="col-sm-2" ng-show="isAddUser">
+                    <span style="color:#ff0000;font-size: 28px;height: 100%;vertical-align: middle;">*</span>
+                </div>
+                <div ng-show="!isAddUser" class="col-sm-2" style="text-align: left;">
+                    <span style="color:#ff0000;font-size: 28px;height: 100%;vertical-align: middle;">*</span>
+                    <span ng-show="!isUpdateKey" class="btn btn-sm btn-default"
+                          ng-click="updateKeyClick();">修改密码</span>
+                    <span ng-show="isUpdateKey" class="btn btn-sm btn-default"
+                          ng-click="updateKeyClick();">不修改密码</span>
+                </div>
+            </div>
+            <div ng-show="isUpdateKey" class="row form-group-sm model-form-group-css">
+                <div class="col-sm-4 model-form-label-css">
+                    <label>用户密码：</label>
+                </div>
+                <div class="col-sm-6">
+                    <input  class="form-control" type="password" name="password" autocomplete="new-password"
+                           style="width: 250px;"
+                           ng-model="userVo.password" placeholder="密码不能为空"  required>
+                </div>
+                <div class="col-sm-2">
+                    <span style="color:#ff0000;font-size: 28px;height: 100%;vertical-align: middle;">*</span>
+                </div>
+            </div>
+            <!--<div class="row form-group-sm model-form-group-css">-->
+                <!--<div class="col-sm-4 model-form-label-css">-->
+                    <!--<label>重复密码：</label>-->
+                <!--</div>-->
+                <!--<div class="col-sm-8">-->
+                    <!--<input type="text" class="form-control model-form-input-css">-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="modal-footer model-foot-css">
+                <button class="btn btn-sm btn-success" type="submit" ng-click="okClick(userVo);">确定</button>
+                <!--<span class="btn btn-sm btn-info" ng-click="okClick();">确定</span>-->
+                <span class="btn btn-sm btn-warning" ng-click="cancelClick();">取消</span>
+            </div>
+        </form>
+    </div>
+</div>

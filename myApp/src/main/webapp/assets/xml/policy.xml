@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root name="策略展示">
+    <group name="攻击窃密检测策略">
+        <item name="木马攻击窃密检测策略"></item>
+        <item name="漏洞利用窃密检测策略"></item>
+        <item name="恶意程序窃密检测策略"></item>
+        <item name="其他攻击窃密检测策略"></item>
+        <item name="未知攻击窃密检测策略"></item>
+    </group>
+    <group name="传输泄密检测策略">
+        <item name="标密检测策略"></item>
+        <item name="关键字检测策略"></item>
+        <item name="板式文件检测策略"></item>
+        <item name="密标文件检测策略"></item>
+        <item name="加密文件检测策略"></item>
+        <item name="多层压缩检测策略"></item>
+        <item name="图片文件筛选策略"></item>
+    </group>
+    <group name="目标侦听策略">
+        <item name="IP审计检测策略"></item>
+        <item name="域名审计检测策略"></item>
+        <item name="URL审计检测策略"></item>
+        <item name="账号审计检测策略"></item>
+    </group>
+    <group name="网络审计策略">
+        <item name="通联关系上报策略"></item>
+        <item name="应用行为上报策略"></item>
+        <item name="应用行为WEB过滤策略"></item>
+        <item name="应用行为DNS过滤策略"></item>
+        <item name="IP白名单过滤策略"></item>
+    </group>
+</root>

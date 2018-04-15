@@ -1,0 +1,68 @@
+<!-- 设备注册 使用的css和“值班管理”模块的css相同 -->
+<div ng-controller="deviceRegisterCtrl" class="box-device-list">
+
+    <!----搜索 ---->
+    <div class="row box_device_btn"> <!-- by_top -->
+        <div class="col-sm-10 box_device_search_input" style="text-align: right;">
+            <form name="myForm">
+                <div class="form-group form-group-sm">
+                    <div class="input-group input-group-md">
+                        <input type="text" class="form-control input-sm " placeholder="请输入检测器编号" ng-model="searchStr"/>
+                        <span class="input-group-addon input-sm" style="cursor: pointer;" ng-click="searchClick();">
+                            <i class="glyphicon glyphicon-search red"></i>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-2" style="text-align: right;">
+            <span class="btn btn-sm btn-success" ng-click="addDeviceClick();">新增</span>
+        </div>
+    </div>
+    <div class="row sub-box-device-list">
+        <div class="box-table-device-list">
+
+            <!-- table-header -->
+            <table class="table table-bordered temp_table-header table_header_top" id="tab_duty">
+                <thead>
+                <tr>
+                    <th class="th-user-manage">检测器编号</th>
+                    <th class="th-user-manage">内存总量</th>
+                    <th class="th-user-manage">CPU信息</th>
+                    <th class="th-user-manage">磁盘信息</th>
+                    <th class="th-user-manage">产品软件版本号</th>
+                    <th class="th-user-manage">接口信息</th>
+                    <th class="th-user-manage">部署单位</th>
+                    <th class="th-user-manage">部署位置</th>
+                    <th class="th-user-manage">创建时间</th>
+                    <th class="th-btn-group-user-manage">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- class="{{item.css}}" -->
+                <tr ng-repeat="item in deviceListShow" class="table_common">
+                    <td class="td-user-manage">{{item.deviceId}}</td>
+                    <td class="td-user-manage">{{item.memTotal}}</td>
+                    <td class="td-user-manage">{{item.cpuInfo}}</td>
+                    <td class="td-user-manage">{{item.diskInfo}}</td>
+                    <td class="td-user-manage">{{item.softVersion}}</td>
+                    <td class="td-user-manage">{{item.interfaceInfo}}</td>
+                    <td class="td-user-manage">{{item.organs}}</td>
+                    <td class="td-user-manage">{{item.address}}</td>
+                    <td class="td-user-manage">{{item.createdTime}}</td>
+                    <td class="td-btn-group-user-manage">
+                        <span class="btn btn-sm btn-success" ng-click="editDeviceClick(item);">编辑</span>
+                        <span class="btn btn-sm btn-warning" ng-click="deleteDeviceClick(item);">删除</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--paging -->
+    <div ng-show="isPaging" class="col-sm-12 box-paging-device-list">
+        <ts-paging current-page="currentPage" page-total="pageTotal" page-size="pageSize" group-size="groupSize" page-change="pageChangeFn(value)"></ts-paging>
+    </div>
+    <!--&lt;!&ndash; 加载进度条loading &ndash;&gt;-->
+    <!--<loading loading-flag="isLoading"></loading>-->
+</div>

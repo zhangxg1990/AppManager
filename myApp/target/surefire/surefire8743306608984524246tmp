@@ -1,0 +1,7 @@
+#surefire
+#Thu Mar 15 16:51:12 CST 2018
+user.dir=D\:\\MinistryofEducation\\DataAnalysis\\newWork\\newtest\\myApp
+maven.repo.local=D\:\\MinistryofEducation\\apache-maven-3.5.0\\.m2\\repository
+idea.version=15.0.2
+localRepository=D\:\\MinistryofEducation\\apache-maven-3.5.0\\.m2\\repository
+basedir=D\:\\MinistryofEducation\\DataAnalysis\\newWork\\newtest\\myApp

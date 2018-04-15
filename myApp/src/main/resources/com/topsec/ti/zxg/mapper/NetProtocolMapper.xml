@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.topsec.ti.zxg.mapper.NetProtocolMapper">
+  <resultMap type="NetProtocol" id="netProtocolMap">
+    <discriminator javaType="string" column="res_type">
+        <case value="CONN" resultType="ConnAudit"/>
+        <case value="WEB" resultType="Web"/>
+        <case value="DNS" resultType="DNS"/>
+        <case value="FILE" resultType="FileTransfer"/>
+        <case value="MAIL" resultType="Mail"/>
+        <case value="SSL" resultType="SSL"/>
+    </discriminator>
+  </resultMap>
+
+ <!-- <sql id="selectNetProtocol" >
+    select t.*,#{type} as res_type from #{type.tableName} t
+  </sql>
+  <select id="get" resultType="Device">
+    select * from device_topology_info where parent_id=#{device_id}
+  </select>-->
+    <!--net_conn_aduit_log-->
+  <select id="queryNetProtocolPage" resultMap="netProtocolMap">
+select netProtocol.*,"${netType}" as res_type from ${netType.tableName} netProtocol
+      <where>
+          <if test="netProtocol.cap_date!= null and netProtocol.cap_date !=''">
+               and netProtocol.cap_date = #{netProtocol.cap_date}
+          </if>
+          <if test="device_id!= null and device_id !=''"> and netProtocol.device_id = #{device_id}
+          </if>
+          <if test="netProtocol.sip!= null and netProtocol.sip !=''">
+              and netProtocol.sip = #{netProtocol.sip}
+          </if>
+          <if test="netProtocol.sport!= null and netProtocol.sport !=''">
+              and netProtocol.sport = #{netProtocol.sport}
+          </if>
+          <if test="netProtocol.smac!= null and netProtocol.smac !=''">
+              and netProtocol.smac = #{netProtocol.smac}
+          </if>
+          <if test="netProtocol.dip!= null and netProtocol.dip !=''">
+              and netProtocol.dip = #{netProtocol.dip}
+          </if>
+          <if test="netProtocol.dport!= null and netProtocol.dport !=''">
+              and netProtocol.dport = #{netProtocol.dport}
+          </if>
+          <if test="netProtocol.dmac!= null and netProtocol.dmac !=''">
+              and netProtocol.dmac = #{netProtocol.dmac}
+          </if>
+          <if test="netProtocol.protocol!= null and netProtocol.protocol !=''">
+              and netProtocol.protocol = #{netProtocol.protocol}
+          </if>
+          <if test="netProtocol.start_time!= null and netProtocol.start_time !=''">
+              and netProtocol.cap_time &gt;= #{netProtocol.start_time}
+          </if>
+          <if test="netProtocol.end_time!= null and netProtocol.end_time !=''">
+              and netProtocol.cap_time &lt;= #{netProtocol.end_time}
+          </if>
+      </where>
+      order by cap_time desc
+  </select>
+ <!-- <select id="listNetProtocolPage" resultMap="netProtocolMap">
+    <include refid="selectNetProtocol"></include>
+  </select>-->
+
+  <!--单个对象-->
+  <!--<select id="listNetProtocolPage" resultType="NetProtocol">-->
+   <!--select t.* from #{type.tableName} t-->
+  <!--</select>-->
+
+</mapper>

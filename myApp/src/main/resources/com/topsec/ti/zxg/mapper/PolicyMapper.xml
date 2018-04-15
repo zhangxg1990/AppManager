@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.topsec.ti.zxg.mapper.PolicyMapper">
+
+  <select id="getPolicyInfoList" resultType="policyInfo">
+    select t.*from policy_info t
+  </select>
+
+  <select id="getPolicyInfos" resultType="policyInfo">
+    select t.* from policy_info t
+    <where>
+      <if test="detectors !=null and detectors.length &gt;=1">
+        and
+        <foreach collection="detectors" item="detector" open=" t.device_id in (" close=")" separator=",">
+          #{detector.device_id}
+        </foreach>
+      </if>
+      <if test="type !=null">
+        and
+        t.policy_type=#{type}
+      </if>
+    </where>
+  </select>
+
+  <select id="getPolicyCntByDeviceId" resultType="Integer">
+    select count(0) from policy_info p where p.device_id=#{value}
+
+  </select>
+
+
+</mapper>

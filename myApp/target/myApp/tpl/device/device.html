@@ -1,0 +1,56 @@
+<div ng-controller="deviceCtrl" class="box homepage-box device_box">
+
+    <div class="tpl-skiner">
+        <div class="tpl-skiner-content">
+            <div>
+                <span>设备名称 :</span> <a class="tpl_sp">{{selectItem.name}}</a>
+            </div>
+            <div>
+                <span>设备状态 :</span> <a class="tpl_sp">正常</a>
+            </div>
+            <div>
+                <span>策略数量 :</span> <a class="tpl_sp">{{selectItem.glzxCount}}</a>
+            </div>
+            <div>
+                <span>告警数量 :</span> <a class="tpl_sp">{{selectItem.jcqCount}}</a>
+            </div>
+        </div>
+        <div class="tpl-skiner-toggle"><span class="glyphicon glyphicon-arrow-left by_tu"></span></div>
+    </div>
+
+    <div class="btn-group pull-right theme-container animated tada" style="right: 20px;top:10px;">
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-sort-by-attributes-alt"></i><span
+                class="hidden-sm hidden-xs"> 模式展示</span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" id="themes">
+            <li><a data-value="classic" href="#" ng-click="setNetWork(0)"><i class="whitespace"></i> 网状显示</a></li>
+            <!--<li><a data-value="cerulean" href="#" ng-click="setNetWork(1)"><i class="whitespace"></i> 横型拓扑</a></li>-->
+            <li><a data-value="cyborg" href="#" ng-click="setNetWork(4)"><i class="whitespace"></i> 竖向显示</a></li>
+            <!--<li><a data-value="simplex" href="#" ng-click="setNetWork(3)"><i class="whitespace"></i> 树状拓扑</a></li>-->
+            <li><a data-value="simplex" href="#" ng-click="setNetWork(2)"><i class="whitespace"></i> 横向显示</a></li>
+        </ul>
+    </div>
+
+
+    <div class="cavs_left_top">
+        <div>
+            <img src="assets/img/architecture_24.png" /> <a>管理中心</a>
+            <span style="color:#ff0100">{{manageCenterNo}}个</span>
+        </div>
+        <div>
+            <img src="assets/img/computer_live_32.png" /> <a>检测器</a>
+            <span style="color:#ff0100">{{totalDeviceNo}}台</span>
+        </div>
+        <!--<div>-->
+            <!--<img src="assets/img/computer_dead_32.png" /> <a>故障检测器</a>-->
+            <!--<span style="color:#ff0100">{{unActiveDeviceNo}}台</span>-->
+        <!--</div>-->
+    </div>
+
+    <div  id="id_topo_box2"    style="width: 100%;height: 100%" >
+
+
+    </div>
+</div>

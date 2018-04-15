@@ -1,0 +1,64 @@
+<div class="by_nav">
+    <!--设备检测-->
+    <!--<div class="by_nav_ys nav1"  ng-show="deviceOK" ng-click="menuClick(1);">-->
+        <!--<i class="glyphicon glyphicon-screenshot"></i><span> 设备检测</span>-->
+    <!--</div>-->
+    <!--策略展示-->
+    <div class="by_nav_ys nav2" ng-show="policyOK" ng-click="menuClick(2);">
+        <i class="glyphicon glyphicon-eye-open"></i><span> 策略展示</span>
+    </div>
+    <!--告警处置-->
+    <div class="by_nav_ys nav3" ng-show="alertOK" ng-click="menuClick(3);">
+        <i class="glyphicon glyphicon-warning-sign"></i>
+        <span>
+            告警处置
+            <!--<span class="am-badge">12</span>-->
+        </span>
+    </div>
+    <!--网络审计-->
+    <div class="by_nav_ys nav4" ng-show="auditOK" ng-click="menuClick(4);">
+        <i class="glyphicon glyphicon-signal"></i><span> 网络审计</span>
+    </div>
+    <!-- -->
+    <div class="by_nav_ys nav8" ng-show="detectorOK" ng-click="menuClick(8);">
+        <i class="glyphicon glyphicon-hd-video"></i><span> 检测器管理</span>
+    </div>
+    <!--扩展应用-->
+    <!--<div class="by_nav_ys nav6" ng-show="expandSysOK" ng-click="menuClick(6);">-->
+        <!--<i class="glyphicon glyphicon-cog"></i><span> 扩展应用</span>-->
+    <!--</div>-->
+    <!-- 数据分析   ng-show="analyzeOK"-->
+    <div style="display: inline-block;" ng-click="menuClick(9);">
+        <div class="btn-group">
+            <div class="by_nav_ys nav9" > <!-- ng-click="menuClick(5)" -->
+                <div ng-click="dataAnalyzeClick(1);" style="float: left;">
+                    <i class="glyphicon glyphicon-stats"></i> 数据分析
+                </div>
+                <button class="by_nav_but" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a ng-click="dataAnalyzeClick(1);">
+                            <i class="glyphicon glyphicon-bell"></i> 攻击态势分析
+                        </a>
+                    </li>
+                    <li>
+                        <a ng-click="dataAnalyzeClick(2);">
+                            <i class="glyphicon glyphicon-star"></i> 泄密态势分析
+                        </a>
+                    </li>
+                    <li>
+                        <a ng-click="dataAnalyzeClick(3);">
+                            <i class="glyphicon glyphicon-tag"></i> 网络行为分析
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <!--<li>-->
+                        <!--<a href="#">导出报表</a>-->
+                    <!--</li>-->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

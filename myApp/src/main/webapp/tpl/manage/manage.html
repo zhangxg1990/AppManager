@@ -1,0 +1,63 @@
+<!-- 扩展应用系统 页面 -->
+<div ng-controller="manageCtrl" class="by_urse">
+    <div class="box">
+        <!-- title -->
+        <div class="by_urse_t">
+            <div class="by_box-inner" data-original-title="">
+                <div class="col-sm-6">
+                    <span><i class="glyphicon glyphicon-cog"></i>&nbsp;扩展应用系统管理</span>
+                </div>
+                <div class="col-sm-6" style="text-align: right;" >
+                    <span class="btn btn-sm btn-default" ng-click="registerClick();">
+                        <i class="glyphicon glyphicon-plus"></i> 添加系统
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- main box -->
+        <div class="box-main-expand-sys">
+            <div class="row box-table-parent-expand-sys">
+                <div class="box-table-expand-sys">
+                    <!--<form>-->
+                     <!--table-header    temp_table-header -->
+                    <table class="table table-bordered temp_table-header table_header_top">
+                        <thead>
+                            <tr>
+                                <th class="th-expand-sys">系统名称</th>
+                                <th class="th-expand-sys">功能描述</th>
+                                <th class="th-expand-sys">访问地址</th>
+                                <th class="th-expand-sys">服务厂商</th>
+                                <th class="th-expand-sys">管理员联系方式</th>
+                                <th class="th-btn-group-expand-sys" >操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in expandSysList">
+                                <td class="td-expand-sys">{{item.name}}</td>
+                                <td class="td-expand-sys">{{item.note}}</td>
+                                <td class="td-expand-sys">{{item.url}}</td>
+                                <td class="td-expand-sys">{{item.original}}</td>
+                                <td class="td-expand-sys">{{item.phone}}</td>
+                                <td class="td-btn-group-expand-sys">
+                                    <span class="btn btn-sm btn-success by_but_bule" ng-click="manageClick(item);">
+                                        <i class="glyphicon glyphicon-edit icon-white"></i> 编辑
+                                    </span>
+                                    <span class="btn btn-sm btn-yellow by_but_red" ng-click="logoutClick(item);">
+                                        <i class="glyphicon glyphicon-trash icon-white"></i> 删除
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--</form>-->
+                </div>
+                <!-- 分页  ng-show="isPaging"-->
+                <div ng-show="isPaging" class="box-paging-expand-sys">
+                    <ts-paging page-total="pageTotal" page-size="pageSize"
+                               group-size="groupSize" page-change="pageChangeFn(value)">
+                    </ts-paging>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

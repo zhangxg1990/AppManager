@@ -1,0 +1,62 @@
+<!-- 角色弹框 -->
+<div class="modal-content" xmlns="http://www.w3.org/1999/html">
+
+    <div class="modal-header model-blue">
+        <span class="model-title">{{title}}</span>
+    </div>
+    <div class="modal-body">
+        <form role="form">
+            <div class="row form-group-sm model-form-group-css">
+                <div class="col-sm-4 model-form-label-css">
+                    角色名称：
+                </div>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" style="width: 250px;"
+                           ng-model="role.name" placeholder="角色名称不能为空"
+                        required>
+                </div>
+                <div class="col-sm-2">
+                    <span style="color:#ff0000;font-size: 26px;height: 100%;vertical-align: middle;">*</span>
+                </div>
+            </div>
+            <div class="row form-group-sm model-form-group-css">
+                <div class="col-sm-4 model-form-label-css">
+                    角色描述：
+                </div>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" style="width: 250px;" ng-model="role.note">
+                </div>
+            </div>
+            <div class="row form-group-sm model-form-group-css">
+                <div class="col-sm-4 model-form-label-css">
+                    角色权限：
+                </div>
+                <div class="col-sm-6">
+                    <div style="width: 250px;height: 150px;border: 1px solid #c0c0c0;overflow-y: auto;">
+                        <!--<treecontrol class="tree-boot" tree-model="authorityList">-->
+                        <!--<input type="checkbox" value="node.name" ng-model="node.checked">{{node.name}}-->
+                        <!--</treecontrol>-->
+                        <ul>
+                            <li ng-repeat="item in authorityList">
+                                <input type="checkbox" name="authority" value="item.name" ng-model="item.checked" required>{{item.name}}
+                                <li style="padding-left: 10px" name="subAuthority" ng-repeat="sub in item.children">
+                                    <input type="checkbox" value="sub.name" ng-model="item.checked">{{sub.name}}
+                                </li>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <span style="color:#ff0000;font-size: 26px;height: 100%;vertical-align: middle;">*</span>
+                </div>
+            </div>
+
+            <div class="modal-footer model-foot-css">
+                <button type="submit" class="btn btn-sm btn-success" ng-click="okClick();">确定</button>
+                <span class="btn btn-sm btn-warning" ng-click="cancelClick();">取消</span>
+                <!--<span class="btn btn-sm btn-info model-btn-ok-css" ng-click="okClick();">确定</span>-->
+                <!--<span class="btn btn-sm btn-warning model-btn-cancel-css" ng-click="cancelClick();">取消</span>-->
+            </div>
+        </form>
+    </div>
+</div>
